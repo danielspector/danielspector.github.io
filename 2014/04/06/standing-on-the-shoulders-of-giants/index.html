@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standing on the Shoulders of Giants &mdash; Daniel Spector</title>
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/images/logo.png"/>
+    <link href="/feed.xml" rel="alternate" type="application/rss+xml" title="Daniel Spector" />
+    <meta name="title" content="Standing on the Shoulders of Giants ">
+    <link rel="canonical" href="www.spector.io/2014/04/06/standing-on-the-shoulders-of-giants/">
+     
+           
+    <meta property="og:title" content="Standing on the Shoulders of Giants "/>
+    <meta property="og:url" content="www.spector.io/2014/04/06/standing-on-the-shoulders-of-giants/"/>
+    
+    
+    <meta property="og:description" content="Messing around with the Twilio API"/>
+    <meta name="description" content="Messing around with the Twilio API"/>
+    
+    <meta property="og:site_name" content="Daniel Spector">     
+</head>
+<body>
+    
+<section class="site-nav">
+    <header>
+        <nav id="navigation">
+            <a class="brand" href="/">
+                <img src="/images/logo.png" alt="Inc">
+            </a>
+            <a href="/" class="home">Blog</a>
+            <a href="www.spector.io">Product</a>
+            <a href="www.flatironschool.com">About</a>
+        </nav>
+       <!--  <nav class="tagline">
+            <span>Just a guy loving programming.</span>
+            <a href="www.spector.io" class="btn btn-outline">Learn More</a> -->
+        </nav>
+    </header>
+</section>
+
+
+<article>
+
+    <div class="container">
+        <header>
+            <div class="meta">
+                By <address><a rel="author" href="" title="Daniel Spector" target="_blank">Daniel Spector</a></address> &mdash;
+                <time pubdate datetime="2014-06-April" title="April 06, 2014">April 06, 2014</time>
+            </div>
+            <h1 class="title">Standing on the Shoulders of Giants</h1>
+            
+        </header>
+
+        <section>
+            <p>Programming today is completely different than programming 30 years ago. Even using Ruby is world’s different than using lower-level programming languages. Take a look at old FORTRAN and Assembly manuals and you quickly begin to appreciate the syntactic beauty of the Ruby programming language.</p>
+
+<p>Another way programming is different today is that we have access to so many more tools. These tools allow us to rely on “solved problems” and create incredibly useful applications.</p>
+
+<p>One of the ways that we have access to these tools is through API’s. An API, or Application Program Interface, is a way for users to interact with your application programmatically. While most average consumers are used to working with graphical user interfaces, an API is a way for programmers to use their application in their own programs. We can then use another company’s API to build our own program.</p>
+
+<p>One API that particularly intrigued me was Twilio. Twilio is a company that offers an API to send text messages and make/receive phone calls. This is a perfect example of standing on the shoulders of giants. Imagine if you had to implement that functionality yourself. It could take months to develop that functionality and only THEN would you be able to start developing your application. Twilio has made an incredibly challenging programming problem almost trivial.</p>
+
+<p>I started with Twilio by signing up for an account on their website. After verifying my own phone number, I was given another phone number that would be used for the application. Before actually working with API, I wondered whether there was a Ruby gem available. Luckily enough, there was, which made interacting with the API incredibly easy. Anytime you need to work with an API, always check whether a Ruby wrapper has been written. Again, standing on the shoulders of giants. Rely on the ingenuity of others to further your own creativity.</p>
+
+<p>After signing up for the account, you receive two authentication tokens to authorize the API and tie it to your account. To get started, I needed to require the twilio-ruby gem so I quickly ran</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>gem install twilio-ruby
+</code></pre></div>
+<p>at the command line. After installation, all I had to do was require the gem at the beginning of my file and I was good to go. If I was building a Sinatra or Rails application, I would have added the gem to my Gemfile and used Bundler to manage the gem dependencies.</p>
+
+<p>The tricky part of using an API to manage your access while hiding your authorization tokens from others. There are several methods for doing this. Rails 4.1, which has not been officially released yet, will implement a new method that allows you to create a secrets.yml file. Other methods include loading the keys as environment variables directly on your production server. Whatever you choose, you want to be absolutely certain that you never put your API keys on Github or any other public repository. This would enable others to use your account illicitly.</p>
+
+<p>Since I wasn’t using Rails and simply wanted to create a Ruby file to interact with the API, I placed the API keys directly in my application. Don’t worry, it won’t be going on Github. The twilio-ruby API gives you access to a set of modules and classes. You can set up your application by creating an instance variable and setting it to a new instance the class below.</p>
+<div class='highlight'><pre><code class='ruby'><span class='vi'>@client</span> <span class='o'>=</span> <span class='no'>Twilio</span><span class='o'>::</span><span class='no'>REST</span><span class='o'>::</span><span class='no'>Client</span><span class='o'>.</span><span class='n'>new</span><span class='p'>(</span><span class='n'>account_sid</span><span class='p'>,</span> <span class='n'>auth_token</span><span class='p'>)</span>
+</code></pre></div>
+<p>Notice that the Twilio::REST::Client took two arguments on initialization; these are the two API keys provided to you by Twilio. Once you had your new instance variable set up, it is super easy to start texting people.</p>
+<div class='highlight'><pre><code class='ruby'><span class='vi'>@client</span><span class='o'>.</span><span class='n'>account</span><span class='o'>.</span><span class='n'>messages</span><span class='o'>.</span><span class='n'>create</span><span class='p'>(</span>
+ <span class='ss'>:from</span> <span class='o'>=&gt;</span> <span class='err'>‘</span><span class='o'>+</span><span class='mi'>13473826253</span><span class='s1'>&#39;,</span>
+<span class='s1'> :to =&gt; ‘+19175555555&#39;</span><span class='p'>,</span>
+ <span class='ss'>:body</span> <span class='o'>=&gt;</span> <span class='err'>“</span><span class='no'>Hey</span> <span class='n'>there!</span> <span class='no'>It</span><span class='err'>’</span><span class='n'>s</span> <span class='n'>me</span> <span class='n'>from</span> <span class='n'>the</span> <span class='no'>Flation</span> <span class='no'>School</span><span class='o'>!</span><span class='err'>”</span>
+<span class='p'>)</span>
+</code></pre></div>
+<p>The “from” phone number is the number provided by Twilio that relates to your account. The “to” phone number can be any number that receives a text, although as long as you’re using the trial version of the API, you can only text numbers that you have verified.</p>
+
+<p>Twilio can also make outgoing phone calls, receive phone calls and receive text messages. It can perform almost any action relating to phones that you would need for your application. Please keep in mind that Twilio charges a nominal fee for its API based on usage. Consult its website for more details.</p>
+
+<p>Twilio, and other programs like it, allow programmers today to accomplish incredible things in a fraction of the time it would have taken previously. Entire businesses that never existed have been built using Twilio’s technology. As I learn more and more about programming, I am in awe of the capabilities that are available to us. I couldn’t be more excited for the applications to come.</p>
+            
+        </section>
+
+        <footer>
+            <address>
+               
+                <p>Written by <strong><a rel="author" href="https://twitter.com/danielspecs" title="" target="_blank">Daniel Spector</a></strong><br>
+                <span class="muted"></span>
+                </p>
+            </address>
+
+        </footer>
+
+        
+    </div>
+</article>
+
+
+<footer class="site-footer">
+    <div class="container">
+        &copy; 2014 
+        
+        <nav>
+            <a href="www.spector.io">Daniel Spector</a> &middot;
+            <a href="/">Blog</a> &middot;
+            <a href="www.spector.io">Product</a> &middot; 
+            <a href="www.flatironschool.com">About</a>
+        </nav>
+        
+        <nav class="social">
+            
+            <a href="https://twitter.com/danielspecs" title="Follow on Twitter" target="_blank"><i class="icon icon-twitter black"></i></a>
+            
+            
+            <a href="http://facebook.com/danielspector" title="Follow on Facebook" target="_blank"><i class="icon icon-facebook black"></i></a>
+                
+            <a href="/feed.xml" title="RSS Feed">
+                <i class="icon icon-rss black"></i>
+            </a>
+        </nav>
+        <p>Incorporated theme by <a href="https://sendtoinc.com">Inc</a></p>
+    </div>
+</footer>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/assets/main.js"></script>
+
+
+
+
+
+
+
+</body>
+</html>

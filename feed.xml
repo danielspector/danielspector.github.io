@@ -1,0 +1,522 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title></title>
+    <link>www.spector.io</link>
+    <atom:link href="www.spector.io/feed.xml" rel="self" type="application/rss+xml" />
+    <description></description>
+    <language>en-us</language>
+    <pubDate>Mon, 07 Apr 2014 00:48:31 +0000</pubDate>
+    <lastBuildDate>Mon, 07 Apr 2014 00:48:31 +0000</lastBuildDate>
+
+    
+    
+    <item>
+      <title>Writing My First Gem - Bit_Price</title>
+      <link>www.spector.io/2014/04/06/writing-my-first-gem---bit_price/</link>
+      <pubDate>Sun, 06 Apr 2014 00:00:00 +0000</pubDate>
+      <author></author>
+      <guid>www.spector.io/2014/04/06/writing-my-first-gem---bit_price</guid>
+      <description>&lt;p&gt;At the Flatiron School we’ve been taught that the structures and syntax of programming are just that, structures. Just like a building is only as valuable as the people you put in it and what you use it for, the structures of programming are only as valuable as the programs you make with them.&lt;/p&gt;
+
+&lt;p&gt;Over the last couple days we covered diverse topics such as web scraping and RubyGems. I decided to implement both of these skills in one project in order to reinforce what we’ve covered in lectures.&lt;/p&gt;
+
+&lt;p&gt;Web scraping is a broad topic that I’ll definitely be writing about more thoroughly in future posts, but for now let’s just define it as “gathering data from a website and bringing it into your program.” Anything that can be viewed through a browser can (theoretically) be scraped. In the Ruby community, most web scraping is done through a gem called Nokogiri.&lt;/p&gt;
+
+&lt;p&gt;A RubyGem, or gem for short, is a packaged piece of code that can be passed around to different computers. If I write a ruby file that I want to share with the world, I want to make it as convenient as possible for others to access and utilize my code. There’s a fantastic project called RubyGems that allows people to easily publish their gems for others to use. In this post, I’m going to explore how I published my first gem and what improvements I still need to make.&lt;/p&gt;
+
+&lt;p&gt;First, before publishing a gem we’re going to assume that you have a working Ruby file that you want to share with the world. The gem can be as simple as printing “Hello World” to the screen or complicated as a Ruby on Rails project. For this project, I decided to write a small scraper that uses Nokogiri to grab the Bitcoin buy and sell prices from Coinbase’s website.&lt;/p&gt;
+
+&lt;h1 id=&quot;bit_price_my_first_gem&quot;&gt;Bit_Price: My First Gem&lt;/h1&gt;
+
+&lt;p&gt;Below is the actual Ruby code that is run when you execute the gem I created. The file is called bit_price.rb and is packaged up with the gem. If you’ve never seen Ruby code (or any code at all) this might look a little unfamiliar to you but that’s OK, you don’t have to understand this code to learn how to create a gem.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;nb&#39;&gt;require&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;nokogiri&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+&lt;span class=&#39;nb&#39;&gt;require&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;nb&#39;&gt;open&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;uri&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+&lt;span class=&#39;k&#39;&gt;def&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;bit_price&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;page&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Nokogiri&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;HTML&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;nb&#39;&gt;open&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;https&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;sr&#39;&gt;//&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;coinbase&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;com&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;charts&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;))&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;prices&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;page&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;css&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;div&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;page&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;header&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;h2&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;pull&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;-&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;right&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;strong&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;text&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;split&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;“$”&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;reject&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:empty?&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+ &lt;span class=&#39;nb&#39;&gt;puts&lt;/span&gt;
+ &lt;span class=&#39;nb&#39;&gt;puts&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;The&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Current&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Bitcoin&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Prices&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;Are&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;
+ &lt;span class=&#39;nb&#39;&gt;puts&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Buy&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;Price&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;c1&#39;&gt;#{prices[0]}”&lt;/span&gt;
+ &lt;span class=&#39;nb&#39;&gt;puts&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Sell&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;Price&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;$&lt;/span&gt;&lt;span class=&#39;c1&#39;&gt;#{prices [1]}”&lt;/span&gt;
+ &lt;span class=&#39;nb&#39;&gt;puts&lt;/span&gt;
+ &lt;span class=&#39;nb&#39;&gt;puts&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Prices&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;provided&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;by&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;www&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;coinbase&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;com&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;charts&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;
+&lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The Nokigiri gem scrapes the prices from the Coinbase site using their HTML tags and CSS selectors. For a quick recap, every website has “tags” which tells your browser how to render the page and CSS selectors which allow you to style your content. Coinbase actually names their CSS selectors for buy and sell prices with identical names, which meant that when I tried to get the text of the name I was given both the buy and sell prices. To get around this, I had to split the text into an array using the “$” as the delimiter and delete the blank string that it added to the array.&lt;/p&gt;
+
+&lt;p&gt;If none of that made sense to you, that’s OK. Just keep in mind that your gem can do anything that you want it to, mine just happens to grab two numbers from a website and prints them to a screen.&lt;/p&gt;
+
+&lt;p&gt;Getting Started with RubyGems To get started with RubyGems, I did a Google search and landed on the official instruction page for RubyGems. The guide is very helpfully written and made it easy to push up the gem.&lt;/p&gt;
+
+&lt;p&gt;The first thing I had to was reorganize my code. I called my main folder “bitcoin_price”. The RubyGems website expects that you will have a folder at the root of your project (the main folder where your project files are) called lib/ where your the Ruby file you just created will live. Additionally, you will need a .gemspec file in your main project directory with the Gem name so let’s create that now. To create a blank file just run:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;touch bit_price.gemspec
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Once you’ve reorganized your files, your structure should look something like this:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;yaml&#39;&gt;&lt;span class=&#39;err&#39;&gt;%&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;bitcoin_price&lt;/span&gt;
+
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;├── bit_price.gemspec&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;└── lib&lt;/span&gt;
+ &lt;span class=&#39;l-Scalar-Plain&#39;&gt;└── bit_price.rb&lt;/span&gt;
+ 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Next you should open up the blank .gemspec file in your favorite text editor (I use Sublime Text) and edit it with the following code, substituting your information where appropriate.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;no&#39;&gt;Gem&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Specification&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;new&lt;/span&gt; &lt;span class=&#39;k&#39;&gt;do&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;|&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;|&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;name&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bit_price&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;version&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;mi&#39;&gt;0&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;mi&#39;&gt;0&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;mi&#39;&gt;2&lt;/span&gt;&lt;span class=&#39;s1&#39;&gt;&amp;#39;&lt;/span&gt;
+&lt;span class=&#39;s1&#39;&gt; s.executables &amp;lt;&amp;lt; ‘bit_price’&lt;/span&gt;
+&lt;span class=&#39;s1&#39;&gt; s.date = ‘2014-02-12&amp;#39;&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;summary&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Bitcoin&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Prices&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;from&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Your&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Terminal&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;description&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Get&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;the&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Bitcoin&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;price&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;easily&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;from&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;your&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;terminal&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;authors&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Daniel&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Spector&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;email&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;danielyspector&lt;/span&gt;&lt;span class=&#39;vi&#39;&gt;@gmail&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;com&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;files&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;lib&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bit_price&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;rb&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;homepage&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt;
+ &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;http&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt;&lt;span class=&#39;sr&#39;&gt;//&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;rubygems&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;org&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;gems&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bit_price&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;license&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;MIT&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+ &lt;span class=&#39;n&#39;&gt;s&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;add_runtime_dependency&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;nokogiri&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;&amp;gt;=&lt;/span&gt;&lt;span class=&#39;mi&#39;&gt;0&lt;/span&gt;&lt;span class=&#39;s2&#39;&gt;&amp;quot;]&lt;/span&gt;
+&lt;span class=&#39;s2&#39;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;One thing to note is the version name. If you previously pushed your gem up to RubyGems with an identical version number and then make changes, it will reject your update. Each push has to have a unique version number. You’ll notice that there’s an executables file right under version. We’ll cover that in a bit. Mostly you want to fill out the information for your gem including your personal information such as author and email. You’ll also see that we’re adding a runtime dependency for Nokogiri. This will install Nokogiri on the user’s computer if it’s not installed already.&lt;/p&gt;
+
+&lt;p&gt;We’re going to create one more file which will make it much more convenient for people to access our gem. We need to create an executable file in a bin/ folder simply called “bit_price” that will allow people to run the code from the command line. For my project I created the following structure:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;yaml&#39;&gt;&lt;span class=&#39;err&#39;&gt;%&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;bitcoin_price&lt;/span&gt;
+
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;├── bin&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;│ └── bit_price&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;├── bit_price.gemspec&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;└── lib&lt;/span&gt;
+ &lt;span class=&#39;l-Scalar-Plain&#39;&gt;└── bit_price.rb&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;In bin/bit_price I created a simple file that called our bit_price.rb file and executed it.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;c1&#39;&gt;#!/usr/bin/env ruby&lt;/span&gt;
+&lt;span class=&#39;nb&#39;&gt;require&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bit_price&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+&lt;span class=&#39;n&#39;&gt;bit_price&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Notice that I named my method bit_price in my bit_price.rb file which has to match the executable call shown above. This will be equivalent to people running&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;ruby bit_price.rb
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;on their command line. Now we’re all set up and we’re ready to test our gem!&lt;/p&gt;
+
+&lt;p&gt;To setup my gem and allow me to test it, I ran the following two commands at the root of my project directory.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;gem build bit_price.gemspec
+&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;gem install ./bit_price-0.0.2.gem
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Note that the version number has to match what you put in your bit_price.gemspec file.&lt;/p&gt;
+
+&lt;p&gt;Now you should be able to run your file simply by typing&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;bit_price
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;If that doesn’t work, you might have to enter irb, require the gem, and then run it.&lt;/p&gt;
+
+&lt;p&gt;Assuming you get the output you’re looking for, you should be ready to distribute your gem.&lt;/p&gt;
+
+&lt;p&gt;Distributing Your Gem: Getting your gems up on RubyGems Now we’re going to get our gems up on RubyGems so anyone can find and download it. First, navigate to the RubyGems and sign up. Remember the handle and password that you enter — it will be important in a minute. Once you sign up, open a new tab in your browser and go the following link:&lt;/p&gt;
+
+&lt;p&gt;https://rubygems.org/api/v1/api_key.yaml&lt;/p&gt;
+
+&lt;p&gt;You’ll be brought to an authentication screen. Type in the handle/username that you set up before. This should automatically download a file called api_key.yaml file to your computer. You’re going to need to move this file to your .gem folder and rename it to CREDENTIALS with the following commands. Assuming your download defaulted to your Downloads folder, run the following:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;mv ~/Downloads/api_key.yaml ~/.gem
+&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;&lt;span class=&#39;nb&#39;&gt;cd&lt;/span&gt; ~/.gem
+&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;mv api_key.yaml CREDENTIALS
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Once you’ve run those commands you should be all set up to push your gem to RubyGems! Simply run the command below and you should see the following output.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;gem push bit_price-0.0.2.gem
+which should &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;hopefully&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt; result in:
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Pushing gem to RubyGems.org… Successfully registered gem: bit_price(0.0.2) Take a small break. You’ve accomplished a lot. Once you come back, your gem should be available for everyone to see on the RubyGems website. A simple way to ensure that you’ve successfully published your gem is to type:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;gem list -r bit_price
+*** REMOTE GEMS ***
+bit_price &lt;span class=&#39;o&#39;&gt;(&lt;/span&gt;0.0.2&lt;span class=&#39;o&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Once you’ve confirmed that your gem has been successfully uploaded, anyone with the RubyGems package manager installed (it comes standard with Ruby) should be able to run&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;gem install bit_price
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;and then&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;bit_price
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;to run the program. Now all anyone has to do is to type your method name and see the output of of your program from anywhere in their terminal.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;bit_price
+The Current Bitcoin Prices Are:
+Buy Price: &lt;span class=&#39;nv&#39;&gt;$676&lt;/span&gt;.69
+Sell Price: &lt;span class=&#39;nv&#39;&gt;$674&lt;/span&gt;.66
+Prices provided by www.coinbase.com/charts
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Great job! Your gem is now live for anyone to download. Make sure to put your code up on Github so others can comment and improve on your work. The power of open source is incredible.&lt;/p&gt;
+
+&lt;p&gt;A To-Do list for this gem A couple quick caveats and some things to consider when writing your own gem.&lt;/p&gt;
+
+&lt;p&gt;It has no tests and you should always test your code in a separate spec file before you publish. I like RSpec, it’s nearly magical. It depends on Nokogiri to run. Since I already have Nokogiri installed, I had no issues with the program but other people might have issues installing Nokogiri when they run your program. If anyone has any feedback on this I would love to hear it. Make sure your gem name isn’t taken already before you try to publish! Your push to RubyGems will not work if the name is taken. You should add a license and a README to the file so you protect yourself and be able to guide new users with how to run your program. I had a lot of fun learning gems and I hope you found this useful. You can find the completed source code at https://github.com/danielspector/bitcoin_price&lt;/p&gt;
+
+&lt;p&gt;As always I would love your feedback on the post. Follow me on Twitter @danielspecs.&lt;/p&gt;
+
+&lt;p&gt;A huge thanks to Sam Schlinkert for reviewing this post and fixing my sometimes inelegant choice of words.&lt;/p&gt;
+
+&lt;p&gt;Thanks for reading!&lt;/p&gt;</description>
+    </item>
+    
+    
+    
+    <item>
+      <title>Standing on the Shoulders of Giants</title>
+      <link>www.spector.io/2014/04/06/standing-on-the-shoulders-of-giants/</link>
+      <pubDate>Sun, 06 Apr 2014 00:00:00 +0000</pubDate>
+      <author></author>
+      <guid>www.spector.io/2014/04/06/standing-on-the-shoulders-of-giants</guid>
+      <description>&lt;p&gt;Programming today is completely different than programming 30 years ago. Even using Ruby is world’s different than using lower-level programming languages. Take a look at old FORTRAN and Assembly manuals and you quickly begin to appreciate the syntactic beauty of the Ruby programming language.&lt;/p&gt;
+
+&lt;p&gt;Another way programming is different today is that we have access to so many more tools. These tools allow us to rely on “solved problems” and create incredibly useful applications.&lt;/p&gt;
+
+&lt;p&gt;One of the ways that we have access to these tools is through API’s. An API, or Application Program Interface, is a way for users to interact with your application programmatically. While most average consumers are used to working with graphical user interfaces, an API is a way for programmers to use their application in their own programs. We can then use another company’s API to build our own program.&lt;/p&gt;
+
+&lt;p&gt;One API that particularly intrigued me was Twilio. Twilio is a company that offers an API to send text messages and make/receive phone calls. This is a perfect example of standing on the shoulders of giants. Imagine if you had to implement that functionality yourself. It could take months to develop that functionality and only THEN would you be able to start developing your application. Twilio has made an incredibly challenging programming problem almost trivial.&lt;/p&gt;
+
+&lt;p&gt;I started with Twilio by signing up for an account on their website. After verifying my own phone number, I was given another phone number that would be used for the application. Before actually working with API, I wondered whether there was a Ruby gem available. Luckily enough, there was, which made interacting with the API incredibly easy. Anytime you need to work with an API, always check whether a Ruby wrapper has been written. Again, standing on the shoulders of giants. Rely on the ingenuity of others to further your own creativity.&lt;/p&gt;
+
+&lt;p&gt;After signing up for the account, you receive two authentication tokens to authorize the API and tie it to your account. To get started, I needed to require the twilio-ruby gem so I quickly ran&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;gem install twilio-ruby
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;at the command line. After installation, all I had to do was require the gem at the beginning of my file and I was good to go. If I was building a Sinatra or Rails application, I would have added the gem to my Gemfile and used Bundler to manage the gem dependencies.&lt;/p&gt;
+
+&lt;p&gt;The tricky part of using an API to manage your access while hiding your authorization tokens from others. There are several methods for doing this. Rails 4.1, which has not been officially released yet, will implement a new method that allows you to create a secrets.yml file. Other methods include loading the keys as environment variables directly on your production server. Whatever you choose, you want to be absolutely certain that you never put your API keys on Github or any other public repository. This would enable others to use your account illicitly.&lt;/p&gt;
+
+&lt;p&gt;Since I wasn’t using Rails and simply wanted to create a Ruby file to interact with the API, I placed the API keys directly in my application. Don’t worry, it won’t be going on Github. The twilio-ruby API gives you access to a set of modules and classes. You can set up your application by creating an instance variable and setting it to a new instance the class below.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;vi&#39;&gt;@client&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Twilio&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;REST&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;::&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Client&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;new&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;account_sid&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;auth_token&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Notice that the Twilio::REST::Client took two arguments on initialization; these are the two API keys provided to you by Twilio. Once you had your new instance variable set up, it is super easy to start texting people.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;vi&#39;&gt;@client&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;account&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;messages&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;create&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;
+ &lt;span class=&#39;ss&#39;&gt;:from&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;+&lt;/span&gt;&lt;span class=&#39;mi&#39;&gt;13473826253&lt;/span&gt;&lt;span class=&#39;s1&#39;&gt;&amp;#39;,&lt;/span&gt;
+&lt;span class=&#39;s1&#39;&gt; :to =&amp;gt; ‘+19175555555&amp;#39;&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt;
+ &lt;span class=&#39;ss&#39;&gt;:body&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&amp;gt;&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Hey&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;there!&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;It&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;s&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;me&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;from&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;the&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Flation&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;School&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;!&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;
+&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The “from” phone number is the number provided by Twilio that relates to your account. The “to” phone number can be any number that receives a text, although as long as you’re using the trial version of the API, you can only text numbers that you have verified.&lt;/p&gt;
+
+&lt;p&gt;Twilio can also make outgoing phone calls, receive phone calls and receive text messages. It can perform almost any action relating to phones that you would need for your application. Please keep in mind that Twilio charges a nominal fee for its API based on usage. Consult its website for more details.&lt;/p&gt;
+
+&lt;p&gt;Twilio, and other programs like it, allow programmers today to accomplish incredible things in a fraction of the time it would have taken previously. Entire businesses that never existed have been built using Twilio’s technology. As I learn more and more about programming, I am in awe of the capabilities that are available to us. I couldn’t be more excited for the applications to come.&lt;/p&gt;</description>
+    </item>
+    
+    
+    
+    <item>
+      <title>Refactoring Rails</title>
+      <link>www.spector.io/2014/04/06/refactoring-rails/</link>
+      <pubDate>Sun, 06 Apr 2014 00:00:00 +0000</pubDate>
+      <author></author>
+      <guid>www.spector.io/2014/04/06/refactoring-rails</guid>
+      <description>&lt;p&gt;Recently at the Flatiron School we were tasked with creating a simplified eBay clone using our newfound knowledge of Ruby on Rails. My team and I diligently worked through the test spec provided to create a fully functioning auction app complete with user accounts, auctions and a whole host of validations.&lt;/p&gt;
+
+&lt;p&gt;However, when I looked back at our code, it was a total mess. We built our app to “work” but didn’t pay any attention to how maintainable the codebase would be down the road. We coupled our logic where it should have been decoupled, placed model logic in our controllers and a whole host of other Rails Sins. I wanted to work through one section of our codebase and refactor it so the code is more readable and maintainable for the future. Since we had a testing spec, I was able to refactor the code and not worry about breaking the application. This post was inspired by Ben Orenstein from Thoughtbot who speaks regularly on refactoring your code (and is the only person who is more obsessed with I am with aliasing their shell commands).&lt;/p&gt;
+
+&lt;p&gt;I searched my codebase for the most heinous example of bad code and found it in my Bids Controller. The Bids Controller creates new bids and associates them to existing auctions. Honestly, I hesitated sharing the code because its so awful. Ugh. Here goes nothing.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;k&#39;&gt;def&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;create&lt;/span&gt;
+   &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;find&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:auction_id&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+   &lt;span class=&#39;vi&#39;&gt;@bid&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bids&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;build&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;amount&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt;  &lt;span class=&#39;n&#39;&gt;bidder_id&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;session&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:user_id&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+   &lt;span class=&#39;k&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bids&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;length&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;mi&#39;&gt;1&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;||&lt;/span&gt; &lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;].&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;to_i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;highest_bid&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;amount_in_dollars&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+     &lt;span class=&#39;k&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;vi&#39;&gt;@bid&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;save&lt;/span&gt;
+         &lt;span class=&#39;n&#39;&gt;flash&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:notice&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;You&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;are&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;the&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;current&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;high&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;bidder!&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+         &lt;span class=&#39;n&#39;&gt;redirect_to&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;auction_path&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+       &lt;span class=&#39;k&#39;&gt;else&lt;/span&gt;
+         &lt;span class=&#39;n&#39;&gt;render&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;auction_path&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+       &lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+     &lt;span class=&#39;k&#39;&gt;else&lt;/span&gt;
+     &lt;span class=&#39;k&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;].&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;to_i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;mi&#39;&gt;0&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;||&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;].&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;include?&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+         &lt;span class=&#39;n&#39;&gt;flash&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:notice&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Amount&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;is&lt;/span&gt; &lt;span class=&#39;ow&#39;&gt;not&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;a&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;number&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+         &lt;span class=&#39;n&#39;&gt;redirect_to&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;auctions&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;c1&#39;&gt;#{@auction.id}”&lt;/span&gt;
+       &lt;span class=&#39;k&#39;&gt;else&lt;/span&gt;
+         &lt;span class=&#39;n&#39;&gt;flash&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:notice&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;Amount&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;is&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;too&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;low!&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+         &lt;span class=&#39;n&#39;&gt;redirect_to&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;auctions&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;c1&#39;&gt;#{@auction.id}”&lt;/span&gt;
+       &lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+     &lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+   &lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+&lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Wow, we have a lot of work ahead of us.&lt;/p&gt;
+
+&lt;p&gt;The first two lines are fairly standard to CRUD applications. I find the current auction by its ID and then associated a new bid for that auction. The first line is actually a really common in Rails. The URL (through the params hash) provides us the current ID so our Create controller action can find the proper Auction from the database. This is so common that its probably much smarter to set this instance variable before each of the controllers that we will need it instead of repeating the logic in every controller.&lt;/p&gt;
+
+&lt;p&gt;At the top of my controller I’m going to create a Rails macro that’s going to run before every controller action that we specify.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;k&#39;&gt;class&lt;/span&gt; &lt;span class=&#39;nc&#39;&gt;BidsController&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;lt;&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;ApplicationController&lt;/span&gt;
+  &lt;span class=&#39;n&#39;&gt;before_action&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;:set_auction&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;only&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:show&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;:update&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;:destroy&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+&lt;span class=&#39;err&#39;&gt;…&lt;/span&gt;
+&lt;span class=&#39;kp&#39;&gt;private&lt;/span&gt;
+
+&lt;span class=&#39;k&#39;&gt;def&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;set_auction&lt;/span&gt;
+  &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;Auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;find&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:auction_id&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;I was able to DRY up my code by finding the auction every time one of those three controllers actions are run. One line down.&lt;/p&gt;
+
+&lt;p&gt;I’m actually fairly comfortable with the second line of code. Most Rails developers would use mass assignment in this case but since I have my actions aliased in my model and there’s only two attributes to set, I don’t mind setting them manually here. Additionally, this is the only place in my bids controller where create new instances of auction so I don’t have any repeating code.&lt;/p&gt;
+
+&lt;p&gt;The rest of the method is one gigantic nested if statement. Heinous.&lt;/p&gt;
+
+&lt;p&gt;Let’s break this down line by line so we can get a feel for what we’re dealing with here.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt; &lt;span class=&#39;k&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bids&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;length&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;mi&#39;&gt;1&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;||&lt;/span&gt; &lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;].&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;to_i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;highest_bid&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;amount_in_dollars&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+ 
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This code will evaluate to true when this is either the first bid is made or the bid placed is highest that the current bid (through a quirk in the code the length of the bids array will be at least one because the instance variable is written in the build statement but not written to the database yet).&lt;/p&gt;
+
+&lt;p&gt;My first instinct is to put this logic in its own method. There’s just too much to keep track of in on statement of logic.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;k&#39;&gt;def&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;first_bid?&lt;/span&gt;
+  &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bids&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;length&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;mi&#39;&gt;1&lt;/span&gt;
+&lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+
+&lt;span class=&#39;k&#39;&gt;def&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;higher_bid?&lt;/span&gt;
+  &lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;].&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;to_i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt;  &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;highest_bid&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;amount_in_dollars&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Then we can refactor the first part of the code to&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;k&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;first_bid?&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;||&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;higher_bid?&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Nice.&lt;/p&gt;
+
+&lt;p&gt;Let’s move down to our next piece of “validation” code&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;k&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;].&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;to_i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;mi&#39;&gt;0&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;||&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;].&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;include?&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;”&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The code above checks whether the input is a string or whether there were invalid characters submitted. To be honest, this kind of validation sounds like it should go in the model. We want basic float validation without having to resort to figuring out every possible invalid combination. Luckily, Rails provides a really convenient macro that we can use in our model:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;n&#39;&gt;validates_numericality_of&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;This macro will prevent the bid from being saved if the amount submitted is not a number.&lt;/p&gt;
+
+&lt;p&gt;Looking over the remainder of our code, we create a new flash notice for our users on new lines. We can slim this down by passing that notice to the redirect so it can be rendered in our views.&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;n&#39;&gt;redirect_to&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;auction_path&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;),&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;notice&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;You&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;are&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;the&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;current&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;high&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;bidder!&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;We also seem to be redirecting to the same view multiple times. By pulling that information out of our the if statement, we can DRY up our codebase. Additionally, since we’re performing our own validation, we can comfortably call our save method directly in our controller. Finally, we can use some Rails magic to simplify some of our method calls. Our final controller codebase looks something like this (apologies for the odd formatting errors):&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;ruby&#39;&gt;&lt;span class=&#39;n&#39;&gt;before_action&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;:set_auction&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;only&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:show&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;:update&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;:destroy&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;
+
+&lt;span class=&#39;k&#39;&gt;def&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;create&lt;/span&gt;
+  &lt;span class=&#39;vi&#39;&gt;@bid&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;=&lt;/span&gt; &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bids&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;build&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;amount&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;bidder_id&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt;   &lt;span class=&#39;n&#39;&gt;session&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:user_id&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;]&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+  &lt;span class=&#39;k&#39;&gt;if&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;first_bid?&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;||&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;higher_bid?&lt;/span&gt;
+    &lt;span class=&#39;vi&#39;&gt;@bid&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;save&lt;/span&gt;
+    &lt;span class=&#39;n&#39;&gt;redirect_to&lt;/span&gt; &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;ss&#39;&gt;notice&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;‘&lt;/span&gt;&lt;span class=&#39;no&#39;&gt;You&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;are&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;the&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;current&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;high&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;bidder!&lt;/span&gt;&lt;span class=&#39;err&#39;&gt;’&lt;/span&gt;
+  &lt;span class=&#39;k&#39;&gt;else&lt;/span&gt;
+    &lt;span class=&#39;n&#39;&gt;redirect_to&lt;/span&gt; &lt;span class=&#39;err&#39;&gt;“&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;auctions&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;/&lt;/span&gt;&lt;span class=&#39;c1&#39;&gt;#{@auction.id}”, notice: ‘Amount is too low!’&lt;/span&gt;
+  &lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+&lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+
+&lt;span class=&#39;k&#39;&gt;def&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;first_bid?&lt;/span&gt;
+  &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;bids&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;length&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;==&lt;/span&gt; &lt;span class=&#39;mi&#39;&gt;1&lt;/span&gt;
+&lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+
+&lt;span class=&#39;k&#39;&gt;def&lt;/span&gt; &lt;span class=&#39;nf&#39;&gt;higher_bid?&lt;/span&gt;
+  &lt;span class=&#39;p&#39;&gt;(&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;params&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;[&lt;/span&gt;&lt;span class=&#39;ss&#39;&gt;:amount&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;].&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;to_i&lt;/span&gt; &lt;span class=&#39;o&#39;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&#39;vi&#39;&gt;@auction&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;highest_bid&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;.&lt;/span&gt;&lt;span class=&#39;n&#39;&gt;amount_in_dollars&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;)&lt;/span&gt;
+&lt;span class=&#39;k&#39;&gt;end&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Our codebase is now decoupled and our logic is much easier to follow.&lt;/p&gt;
+
+&lt;p&gt;The main reason why we were able to change our code confidently is because we had a passing test spec before we started. Writing tests for your code is so important because it gives you the flexibility to make your code as best as it could be. By practicing TDD, you can confidentially refactor your codebase and not worry about breaking your application.&lt;/p&gt;
+
+&lt;p&gt;Happy refactoring!&lt;/p&gt;</description>
+    </item>
+    
+    
+    
+    <item>
+      <title>My First Week at the Flatiron School</title>
+      <link>www.spector.io/2014/04/06/my-first-week-at-the-flatiron-school/</link>
+      <pubDate>Sun, 06 Apr 2014 00:00:00 +0000</pubDate>
+      <author></author>
+      <guid>www.spector.io/2014/04/06/my-first-week-at-the-flatiron-school</guid>
+      <description>&lt;p&gt;The first week at Flatiron is over and it has been one of the most remarkable weeks of my life. I can’t ever remember having so many highs and lows in one week.&lt;/p&gt;
+
+&lt;p&gt;First, a little context would be helpful.&lt;/p&gt;
+
+&lt;p&gt;I was someone who always looked askance at programmers. It was something that I always wanted to do but never was able. I tried over and over again to look but nothing would click. I needed a way to see the entire picture instead of looking at one tiny part. It was really difficult to conceptualize how a “hello world” tutorial became Facebook. After talking with local programmers, I realized that I needed to dive in and finally explore my passion.&lt;/p&gt;
+
+&lt;p&gt;There’s a catch though. Programming is not easy. The Flatiron School actually begins before you get to campus. You complete about 100 hours of Prework covering the basics of HTML, CSS, Git, Ruby, SQL and Ruby on Rails.&lt;/p&gt;
+
+&lt;p&gt;Don’t know any of that? That’s alright, neither did I. The Prework itself was challeging but the most important part that I got out of it was learning how everything worked together. You used Ruby on your server to process data from your server which you access with SQL. You send that data to the browser as HTML and CSS. You use Ruby on Rails to bring everything together and save your files using Git. The acronyms soon became second-nature and I looked forward to implementing them in class at the school.&lt;/p&gt;
+
+&lt;p&gt;The first couple days were focused on Git. Git is a version control system that allows you to take “photographs” of your files at specific points. Git is pretty easy to use when working on your own project but challenging to use when working together. There’s an entire site, Github dedicated to working together using Git. Github has become the sine qua non of programming, it is indispensable and everywhere.&lt;/p&gt;
+
+&lt;p&gt;On the third day, we moved on to Ruby, which is the heart of the curriculum at the Flatiron School. The first day seemed familiar and comfortable, given my previous experience with the Prework. By the end of the week, I was an absolute mess. Methods, hashes, arrays, iterations (all subjects of future blog posts). It all swirled together until each had no meaning to me. I was overwhelmed and quite frankly, terrified. I had left a good paying job to explore something I was incredibly passionate about. But what if I couldn’t make it? What if I just didn’t have the “programming gene”?&lt;/p&gt;
+
+&lt;p&gt;The TA’s and other students at the school were extremely helpful. Many of the students have prior programming experience so they were able to help me work through some of the concepts, as most of them were completely foreign to me. I managed to get through my assignments and homeworks but they were long, difficult affairs.&lt;/p&gt;
+
+&lt;p&gt;After being up late on Saturday night working through another set of labs and homework, I laid awake wondering whether there was something I was missing. Every day seemed more difficult and I wondered why things didn’t seem to be clicking. Suddenly, I bolted up in bed. I was looking at things from the wrong perspective entirely. Every day was difficult because I was learning brand-new material for the first time. It was supposed to be hard, it was the only way to learn. I grabbed my laptop and quickly found the files I had been working on the past Thursday, the first day that programming just seemed impossibly hard. When I opened the files, I nearly laughed. The code I had written and the challenges I had completed were almost trivially easy.&lt;/p&gt;
+
+&lt;p&gt;I now subscribe to the One Day Forward, Two Days Back rule of learning to program. Every single day learning to programming will be difficult. Some days will be harder than others but all of it is absolutely necessary. Anything worth having is worth working for. However, two days after I learn new concepts, I will look back and be amazed at how easy it looks. With that in mind its easy, even enjoyable to work through the challenges. I know the light is always just around the corner.&lt;/p&gt;
+
+&lt;p&gt;If you want to join me as I learn to code, please bookmark this blog and follow me on Twitter @danielspecs.&lt;/p&gt;</description>
+    </item>
+    
+    
+    
+    <item>
+      <title>Learning to Learn</title>
+      <link>www.spector.io/2014/04/06/learning-to-learn/</link>
+      <pubDate>Sun, 06 Apr 2014 00:00:00 +0000</pubDate>
+      <author></author>
+      <guid>www.spector.io/2014/04/06/learning-to-learn</guid>
+      <description>&lt;p&gt;The more that I try to wrap my head around loops, variables and conditions the more I realize that coding is an art. Most people have assumed that the advent of the computer age would usher in a new era where robot-speak would be the norm and people would be shunned for their creative expressions.&lt;/p&gt;
+
+&lt;p&gt;In my experience, it is just the opposite. Learning to code has been one of the most eye-opening experiences of my life because I’ve never considered how much we rely on understood social norms when communicating. When we our friend a simple question, there is so much meaning that’s understood by both parties which we take for granted. Chris Pine in his classic book “Learn to Program” points this out perfectly when he asking a friend to make a peanut butter &amp;amp; jelly sandwich. Even if your friend has never stepped into a kitchen before, its really simple to instruct someone to make you a sandwich. Computers are not like that at all. You can instruct your friend to “spread the peanut butter” but if you tried that with a computer you would get an error. Why? Because what does spread mean? Spread with what? How to spread? Where does the peanut butter go? All of these simple understood norms go away when you’re dealing with a computer.&lt;/p&gt;
+
+&lt;p&gt;This is why the most difficult and challenging part of learning to program is learning how to express yourself. When learning your first language, you’re learning to learn. Once you can express yourself in the way that a computer understands, it doesn’t really matter all that much when you have to use curly braces, awkward syntax or parentheses. Those can be learned and most experienced programmers can pick up a new language quickly because they understand the fundamentals of speaking to a computer. I’m hoping that my time at the Flatiron School allows me to learn to learn.&lt;/p&gt;</description>
+    </item>
+    
+    
+    
+    <item>
+      <title>Folderize Me Capt'n</title>
+      <link>www.spector.io/2014/04/06/folderize-me-captn/</link>
+      <pubDate>Sun, 06 Apr 2014 00:00:00 +0000</pubDate>
+      <author></author>
+      <guid>www.spector.io/2014/04/06/folderize-me-captn</guid>
+      <description>&lt;p&gt;All groups will eventually agree on a code, a set of rules that they can use to communicate with each other. To outsiders, these codes may look inscrutable, but to those on the inside its almost a way of life. Rubyists around the world have largely agreed to a file structure when creating Ruby programs and scripts. When I first encountered the file structure I was lost and confused, wandering around from file to file not sure of what I was looking like. After spending some time working in and creating ruby file structures, I’m more comfortable than ever. It’s my hope that after reading you’ll feel the same.&lt;/p&gt;
+
+&lt;p&gt;The standard Ruby file structure looks something like this:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;yaml&#39;&gt;&lt;span class=&#39;err&#39;&gt;%&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;project_root&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;├── bin&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;│ └── generate&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;├── config&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;| └── environment.rb&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;├── lib&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;| └── project_file.rb&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;├── spec&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;| └── spec_helper.rb&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;└── .rspec&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;└── Gemfile&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;└── Gemfile.lock&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;└── README.md&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;└── Rakefile&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;The file structure exists as a way to organize our code and keep it DRY. DRY stands for “Don’t Repeat Yourself” which means we want to avoid duplication like the plague. The file structure allows each folder to have a specific job, making debugging easier. Let’s explore each of folders above and hope to tease out some more meaning.&lt;/p&gt;
+
+&lt;p&gt;Bin — The bin directory is usually reserved for executable files. Ad you can see above, the bin directory has one file in our example, generate, which we would make executable. Most Rubyists will create an executable file that actually runs their code, rather than having the code run on its own. This keeps the execution of our code separate from the formulation of our code, allowing us to debug when we find problems.&lt;/p&gt;
+
+&lt;p&gt;Config — The config directory is used for configuration files. You can have as few or as many config files as you’d like. Most of the time its best to keep all of your configuration in one file which we called environment.rb. In here we “require” all of our files which lets each part of the program talk to one another other. Just placing files in the same folder is not enough, we need to explicitly tell our files that they can talk to each other. Additionally, we would include any libraries we need as well as set up our database structure. You can think of the Config folder as your Ruby version of Grand Central Station — A central meeeting point so everyone can get to where they need to get.&lt;/p&gt;
+
+&lt;p&gt;Lib — This is where the heart of our program will live. The lib folder will often have many subdirectories, each relating to a different part of the program. Additionally, while not pictured above, there may additional folders in the lib directory which relate to abstracted code from our program such as modules. In Rubyland, these would usually go in a directory called “concerns”.&lt;/p&gt;
+
+&lt;p&gt;Spec — This is where all of our tests will live. I’m using the RSpec testing framework but you can use any framework that you’re comfortable with. The spec folder will often contain dozens of testing files, each testing a separate part of your code. Most testing files are named after the file that they are testing along with &lt;em&gt;spec at the end of the filename. For example, if we were testing a file from our lib directory called artist.rb, we would probably call our matching test file artist&lt;/em&gt;spec.rb. We generate the spec_helper.rb file that you see above by running&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;rspec --init
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;in our project root, which also creates a .rspec file. These two files allow us to configure RSpec and tweak to our needs so we can test our files. Most importantly, we need to make sure that our testing files know about all the other files in the file structure so we would make sure to require the environment.rb file we discussed earlier at the top of our spec_helper.rb file.&lt;/p&gt;
+
+&lt;p&gt;Gemfile &amp;amp; Gemfile.lock — Gems are a really convenient way for Rubyists to pass around and share code. As I discussed in a previous blog post, Gems are often indispensable to the function of ourprogram and we want to make sure that we are including the gems we want and managing them properly. A really clever program called Bundler allows us to manage the gems we’ll be needing in our program. To get set up with a Gemfile in your program run&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;bundle init
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;which will create the Gemfile that you see in the directory above. Once you’ve added the gems that you need in your program, run&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;bundle
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;and the Gemfile.lock file will be created which makes sure that your program is running the correct gems at all times. Any additional gems required can be added to the Gemfile. It is very important to run the bundle command as seen above every time you make a change to your Gemfile.&lt;/p&gt;
+
+&lt;p&gt;README.md — This is optional for your program, but highly recommended if you will be sharing your code with others. Many programmers spend so much time with their own programs that they have an intuitive sense of how it operates. However, others who stumble on to your code may feel quite differently. It’s important to properly document the functionality of your program so it will be accessible to as many people as possible.&lt;/p&gt;
+
+&lt;p&gt;Rakefile — Finally, we arrive at our Rakefile, which allows us to to run custom tasks for our program. While a full discussion of Rake is beyond the scope of this post, be aware that many Ruby programs rely on Rake tasks to run and set a lot of their functionality. These Rake tasks are set in the Rakefile.&lt;/p&gt;
+
+&lt;p&gt;An Easier Way — Folderize Wow! That’s a lot of folders! When getting started on a Ruby program, it takes a long time to create all the directories and files, making sure that they talk to each other. Luckily, there’s another way. To automate the process, I created a gem called Folderize which creates the directory structure discussed above. To install it, go to your terminal and type&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;gem install folderize
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;Once the gem is installed, make a new directory that your Ruby project will live in. Instead of spending time creating the folders and files listed above, just run:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;bash&#39;&gt;&lt;span class=&#39;nv&#39;&gt;$ &lt;/span&gt;folderize
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;After a brief pause, you should have a complete working file structure like you see above. Happy coding!&lt;/p&gt;
+
+&lt;p&gt;Please keep in mind that the above is a general guide to creating a Ruby file structure and should not be regarded as a canonical source. There can be an infinite amount of variation from what’s listed above but by using Folderize you will be off to a great start.&lt;/p&gt;
+
+&lt;p&gt;The code for the gem can be found at Github. Pull requests are welcome. As always, I appreciate any feedback you may have about the blog post or the gem itself. You can reach me on Twitter @danielspecs&lt;/p&gt;</description>
+    </item>
+    
+    
+    
+    <item>
+      <title>A little bit about me</title>
+      <link>www.spector.io/2013/10/08/incorporated/</link>
+      <pubDate>Tue, 08 Oct 2013 00:00:00 +0000</pubDate>
+      <author></author>
+      <guid>www.spector.io/2013/10/08/incorporated</guid>
+      <description>&lt;p&gt;Incorporated provides a great typography, responsive design, author details, semantic markup and more.&lt;/p&gt;
+
+&lt;p&gt;You can set customize post covers, and other things directly in the post front matter:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;yaml&#39;&gt;&lt;span class=&#39;l-Scalar-Plain&#39;&gt;layout&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;post&lt;/span&gt;
+
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;title&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;Jekyll Incorporated Features&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;subtitle&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&amp;quot;What&amp;#39;s&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;in&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;the&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;box&amp;quot;&lt;/span&gt;
+
+&lt;span class=&#39;c1&#39;&gt;# Setup post cover image in /images/&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;cover_image&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;upload.jpg&lt;/span&gt;
+
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;excerpt&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;s&#39;&gt;&amp;quot;Incorporated&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;provides&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;great&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;typography,&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;responsive&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;design,&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;author&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;details,&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;semantic&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;markup&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;and&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;more.&amp;quot;&lt;/span&gt;
+
+&lt;span class=&#39;c1&#39;&gt;# Author details, including Google Plus authorship&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;author&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;name&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;Karri Saarinen&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;twitter&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;karrisaarinen&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;gplus&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;100687498195339762535&lt;/span&gt; 
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;bio&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;Co-founder, Design&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;image&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;ks.jpg&lt;/span&gt;
+  
+&lt;span class=&#39;c1&#39;&gt;# Keep it as draft, not published in index.html or feed.xml&lt;/span&gt;
+&lt;span class=&#39;l-Scalar-Plain&#39;&gt;draft&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;false&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;h4 id=&quot;configurable__code_snipped_highlighting&quot;&gt;Configurable &amp;amp; Code Snipped Highlighting&lt;/h4&gt;
+
+&lt;p&gt;/assets/stylesheets/main.scss:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;scss&#39;&gt;&lt;span class=&#39;cm&#39;&gt;/* Bodytext font */&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;$font&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;s2&#39;&gt;&amp;quot;Droid Sans&amp;quot;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;s2&#39;&gt;&amp;quot;Helvetica Neue&amp;quot;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;Helvetica&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;Arial&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;sans-serif&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;;&lt;/span&gt;
+
+&lt;span class=&#39;cm&#39;&gt;/* Font for headings */&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;$fontheadings&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;s2&#39;&gt;&amp;quot;Droid Sans&amp;quot;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;s2&#39;&gt;&amp;quot;Helvetica Neue&amp;quot;&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;Helvetica&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;n&#39;&gt;Arial&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;,&lt;/span&gt; &lt;span class=&#39;no&#39;&gt;sans-serif&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;;&lt;/span&gt;
+
+&lt;span class=&#39;cm&#39;&gt;/* Text colors */&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;$text&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;mh&#39;&gt;#21272d&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;;&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;$textmuted&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;mh&#39;&gt;#848484&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;;&lt;/span&gt;
+&lt;span class=&#39;nv&#39;&gt;$accent&lt;/span&gt;&lt;span class=&#39;o&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;mh&#39;&gt;#2077b2&lt;/span&gt;&lt;span class=&#39;p&#39;&gt;;&lt;/span&gt;    
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;config.yml:&lt;/p&gt;
+&lt;div class=&#39;highlight&#39;&gt;&lt;pre&gt;&lt;code class=&#39;yaml&#39;&gt;&lt;span class=&#39;l-Scalar-Plain&#39;&gt;inc&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;
+  &lt;span class=&#39;c1&#39;&gt;# Blog Information&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;title&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;        &lt;span class=&#39;s&#39;&gt;&amp;quot;Jekyll&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;Incorporated&amp;quot;&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;subtitle&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;     &lt;span class=&#39;s&#39;&gt;&amp;quot;Modern&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;Jekyll&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;based&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;blog&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;for&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;companies&amp;quot;&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;cover_image&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;blog-cover.jpg&lt;/span&gt;
+  
+  &lt;span class=&#39;c1&#39;&gt;# Company information&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;company&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;      &lt;span class=&#39;l-Scalar-Plain&#39;&gt;Incorporated&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;url&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;          &lt;span class=&#39;l-Scalar-Plain&#39;&gt;http://incorporated.sendtoinc.com/&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;facebook&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;     &lt;span class=&#39;l-Scalar-Plain&#39;&gt;sendtoinc&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;twitter&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;      &lt;span class=&#39;l-Scalar-Plain&#39;&gt;sendtoinc&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;about_link&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;   &lt;span class=&#39;l-Scalar-Plain&#39;&gt;https://sendtoinc.com/about/&lt;/span&gt;
+  
+  &lt;span class=&#39;c1&#39;&gt;# Product Information&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;product_link&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; &lt;span class=&#39;l-Scalar-Plain&#39;&gt;http://incorporated.sendtoinc.com/&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;tagline&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;      &lt;span class=&#39;s&#39;&gt;&amp;quot;Get&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;a&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;modern&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;blog&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;for&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;your&lt;/span&gt;&lt;span class=&#39;nv&#39;&gt; &lt;/span&gt;&lt;span class=&#39;s&#39;&gt;company&amp;quot;&lt;/span&gt;
+  
+  &lt;span class=&#39;c1&#39;&gt;# Comments&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;disqus&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;
+    &lt;span class=&#39;c1&#39;&gt;# Eg. &amp;quot;exampleblog&amp;quot; Set to false to disable comments&lt;/span&gt;
+    &lt;span class=&#39;l-Scalar-Plain&#39;&gt;shortname&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;false&lt;/span&gt;
+  
+  
+  &lt;span class=&#39;c1&#39;&gt;# Sharing settings&lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;sharing&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;
+    &lt;span class=&#39;l-Scalar-Plain&#39;&gt;twitter&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;    &lt;span class=&#39;l-Scalar-Plain&#39;&gt;false&lt;/span&gt;
+    &lt;span class=&#39;l-Scalar-Plain&#39;&gt;facebook&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;   &lt;span class=&#39;l-Scalar-Plain&#39;&gt;false&lt;/span&gt;
+    &lt;span class=&#39;l-Scalar-Plain&#39;&gt;gplus&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;      &lt;span class=&#39;l-Scalar-Plain&#39;&gt;false&lt;/span&gt;
+    &lt;span class=&#39;l-Scalar-Plain&#39;&gt;hn&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;         &lt;span class=&#39;l-Scalar-Plain&#39;&gt;false&lt;/span&gt;
+    
+  
+ &lt;span class=&#39;c1&#39;&gt;# Analytics     &lt;/span&gt;
+  &lt;span class=&#39;l-Scalar-Plain&#39;&gt;analytics&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;
+    &lt;span class=&#39;l-Scalar-Plain&#39;&gt;google&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt; 
+      &lt;span class=&#39;c1&#39;&gt;# eg. &amp;#39;UA-123-12&amp;#39;&lt;/span&gt;
+      &lt;span class=&#39;l-Scalar-Plain&#39;&gt;id&lt;/span&gt;&lt;span class=&#39;p-Indicator&#39;&gt;:&lt;/span&gt;       &lt;span class=&#39;l-Scalar-Plain&#39;&gt;false&lt;/span&gt;    
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Zoomable images&lt;/strong&gt;&lt;/p&gt;
+&lt;div class=&#39;full zoomable&#39;&gt;&lt;img src=&#39;/images/incorporated.jpg&#39; /&gt;&lt;/div&gt;
+&lt;p&gt;&lt;strong&gt;Awesome quotes&lt;/strong&gt;&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;“Effective companies tend to communicate more, their people are curious and they have opinions”&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Stay tuned for updates.&lt;/p&gt;</description>
+    </item>
+    
+    
+
+  </channel> 
+</rss>

@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Refactoring Rails &mdash; Daniel Spector</title>
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/images/logo.png"/>
+    <link href="/feed.xml" rel="alternate" type="application/rss+xml" title="Daniel Spector" />
+    <meta name="title" content="Refactoring Rails ">
+    <link rel="canonical" href="www.spector.io/2014/04/06/refactoring-rails/">
+     
+           
+    <meta property="og:title" content="Refactoring Rails "/>
+    <meta property="og:url" content="www.spector.io/2014/04/06/refactoring-rails/"/>
+    
+    
+    <meta property="og:description" content="Slimming down an out-of-control controller"/>
+    <meta name="description" content="Slimming down an out-of-control controller"/>
+    
+    <meta property="og:site_name" content="Daniel Spector">     
+</head>
+<body>
+    
+<section class="site-nav">
+    <header>
+        <nav id="navigation">
+            <a class="brand" href="/">
+                <img src="/images/logo.png" alt="Inc">
+            </a>
+            <a href="/" class="home">Blog</a>
+            <a href="www.spector.io">Product</a>
+            <a href="www.flatironschool.com">About</a>
+        </nav>
+       <!--  <nav class="tagline">
+            <span>Just a guy loving programming.</span>
+            <a href="www.spector.io" class="btn btn-outline">Learn More</a> -->
+        </nav>
+    </header>
+</section>
+
+
+<article>
+
+    <div class="container">
+        <header>
+            <div class="meta">
+                By <address><a rel="author" href="" title="" target="_blank"></a></address> &mdash;
+                <time pubdate datetime="2014-06-April" title="April 06, 2014">April 06, 2014</time>
+            </div>
+            <h1 class="title">Refactoring Rails</h1>
+            
+        </header>
+
+        <section>
+            <p>Recently at the Flatiron School we were tasked with creating a simplified eBay clone using our newfound knowledge of Ruby on Rails. My team and I diligently worked through the test spec provided to create a fully functioning auction app complete with user accounts, auctions and a whole host of validations.</p>
+
+<p>However, when I looked back at our code, it was a total mess. We built our app to “work” but didn’t pay any attention to how maintainable the codebase would be down the road. We coupled our logic where it should have been decoupled, placed model logic in our controllers and a whole host of other Rails Sins. I wanted to work through one section of our codebase and refactor it so the code is more readable and maintainable for the future. Since we had a testing spec, I was able to refactor the code and not worry about breaking the application. This post was inspired by Ben Orenstein from Thoughtbot who speaks regularly on refactoring your code (and is the only person who is more obsessed with I am with aliasing their shell commands).</p>
+
+<p>I searched my codebase for the most heinous example of bad code and found it in my Bids Controller. The Bids Controller creates new bids and associates them to existing auctions. Honestly, I hesitated sharing the code because its so awful. Ugh. Here goes nothing.</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>def</span> <span class='nf'>create</span>
+   <span class='vi'>@auction</span> <span class='o'>=</span> <span class='no'>Auction</span><span class='o'>.</span><span class='n'>find</span><span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:auction_id</span><span class='o'>]</span><span class='p'>)</span>
+   <span class='vi'>@bid</span> <span class='o'>=</span> <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>bids</span><span class='o'>.</span><span class='n'>build</span><span class='p'>(</span><span class='ss'>amount</span><span class='p'>:</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>]</span><span class='p'>,</span>  <span class='n'>bidder_id</span><span class='p'>:</span> <span class='n'>session</span><span class='o'>[</span><span class='ss'>:user_id</span><span class='o'>]</span><span class='p'>)</span>
+   <span class='k'>if</span> <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>bids</span><span class='o'>.</span><span class='n'>length</span> <span class='o'>==</span> <span class='mi'>1</span> <span class='o'>||</span> <span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>].</span><span class='n'>to_i</span> <span class='o'>&gt;</span> <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>highest_bid</span><span class='o'>.</span><span class='n'>amount_in_dollars</span><span class='p'>)</span>
+     <span class='k'>if</span> <span class='vi'>@bid</span><span class='o'>.</span><span class='n'>save</span>
+         <span class='n'>flash</span><span class='o'>[</span><span class='ss'>:notice</span><span class='o'>]</span> <span class='o'>=</span> <span class='err'>‘</span><span class='no'>You</span> <span class='n'>are</span> <span class='n'>the</span> <span class='n'>current</span> <span class='n'>high</span> <span class='n'>bidder!</span><span class='err'>’</span>
+         <span class='n'>redirect_to</span> <span class='n'>auction_path</span><span class='p'>(</span><span class='vi'>@auction</span><span class='p'>)</span>
+       <span class='k'>else</span>
+         <span class='n'>render</span> <span class='n'>auction_path</span><span class='p'>(</span><span class='vi'>@auction</span><span class='p'>)</span>
+       <span class='k'>end</span>
+     <span class='k'>else</span>
+     <span class='k'>if</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>].</span><span class='n'>to_i</span> <span class='o'>==</span> <span class='mi'>0</span> <span class='o'>||</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>].</span><span class='n'>include?</span><span class='p'>(</span><span class='err'>“</span><span class='p'>,</span><span class='err'>”</span><span class='p'>)</span>
+         <span class='n'>flash</span><span class='o'>[</span><span class='ss'>:notice</span><span class='o'>]</span> <span class='o'>=</span> <span class='err'>‘</span><span class='no'>Amount</span> <span class='n'>is</span> <span class='ow'>not</span> <span class='n'>a</span> <span class='n'>number</span><span class='err'>’</span>
+         <span class='n'>redirect_to</span> <span class='err'>“</span><span class='o'>/</span><span class='n'>auctions</span><span class='o'>/</span><span class='c1'>#{@auction.id}”</span>
+       <span class='k'>else</span>
+         <span class='n'>flash</span><span class='o'>[</span><span class='ss'>:notice</span><span class='o'>]</span> <span class='o'>=</span> <span class='err'>‘</span><span class='no'>Amount</span> <span class='n'>is</span> <span class='n'>too</span> <span class='n'>low!</span><span class='err'>’</span>
+         <span class='n'>redirect_to</span> <span class='err'>“</span><span class='o'>/</span><span class='n'>auctions</span><span class='o'>/</span><span class='c1'>#{@auction.id}”</span>
+       <span class='k'>end</span>
+     <span class='k'>end</span>
+   <span class='k'>end</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p>Wow, we have a lot of work ahead of us.</p>
+
+<p>The first two lines are fairly standard to CRUD applications. I find the current auction by its ID and then associated a new bid for that auction. The first line is actually a really common in Rails. The URL (through the params hash) provides us the current ID so our Create controller action can find the proper Auction from the database. This is so common that its probably much smarter to set this instance variable before each of the controllers that we will need it instead of repeating the logic in every controller.</p>
+
+<p>At the top of my controller I’m going to create a Rails macro that’s going to run before every controller action that we specify.</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>class</span> <span class='nc'>BidsController</span> <span class='o'>&lt;</span> <span class='no'>ApplicationController</span>
+  <span class='n'>before_action</span> <span class='ss'>:set_auction</span><span class='p'>,</span> <span class='ss'>only</span><span class='p'>:</span> <span class='o'>[</span><span class='ss'>:show</span><span class='p'>,</span> <span class='ss'>:update</span><span class='p'>,</span> <span class='ss'>:destroy</span><span class='o'>]</span>
+<span class='err'>…</span>
+<span class='kp'>private</span>
+
+<span class='k'>def</span> <span class='nf'>set_auction</span>
+  <span class='vi'>@auction</span> <span class='o'>=</span> <span class='no'>Auction</span><span class='o'>.</span><span class='n'>find</span><span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:auction_id</span><span class='o'>]</span><span class='p'>)</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p>I was able to DRY up my code by finding the auction every time one of those three controllers actions are run. One line down.</p>
+
+<p>I’m actually fairly comfortable with the second line of code. Most Rails developers would use mass assignment in this case but since I have my actions aliased in my model and there’s only two attributes to set, I don’t mind setting them manually here. Additionally, this is the only place in my bids controller where create new instances of auction so I don’t have any repeating code.</p>
+
+<p>The rest of the method is one gigantic nested if statement. Heinous.</p>
+
+<p>Let’s break this down line by line so we can get a feel for what we’re dealing with here.</p>
+<div class='highlight'><pre><code class='ruby'> <span class='k'>if</span> <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>bids</span><span class='o'>.</span><span class='n'>length</span> <span class='o'>==</span> <span class='mi'>1</span> <span class='o'>||</span> <span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>].</span><span class='n'>to_i</span> <span class='o'>&gt;</span> <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>highest_bid</span><span class='o'>.</span><span class='n'>amount_in_dollars</span><span class='p'>)</span>
+ 
+</code></pre></div>
+<p>This code will evaluate to true when this is either the first bid is made or the bid placed is highest that the current bid (through a quirk in the code the length of the bids array will be at least one because the instance variable is written in the build statement but not written to the database yet).</p>
+
+<p>My first instinct is to put this logic in its own method. There’s just too much to keep track of in on statement of logic.</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>def</span> <span class='nf'>first_bid?</span>
+  <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>bids</span><span class='o'>.</span><span class='n'>length</span> <span class='o'>==</span> <span class='mi'>1</span>
+<span class='k'>end</span>
+
+<span class='k'>def</span> <span class='nf'>higher_bid?</span>
+  <span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>].</span><span class='n'>to_i</span> <span class='o'>&gt;</span>  <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>highest_bid</span><span class='o'>.</span><span class='n'>amount_in_dollars</span><span class='p'>)</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p>Then we can refactor the first part of the code to</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>if</span> <span class='n'>first_bid?</span> <span class='o'>||</span> <span class='n'>higher_bid?</span>
+</code></pre></div>
+<p>Nice.</p>
+
+<p>Let’s move down to our next piece of “validation” code</p>
+<div class='highlight'><pre><code class='ruby'><span class='k'>if</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>].</span><span class='n'>to_i</span> <span class='o'>==</span> <span class='mi'>0</span> <span class='o'>||</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>].</span><span class='n'>include?</span><span class='p'>(</span><span class='err'>“</span><span class='p'>,</span><span class='err'>”</span><span class='p'>)</span>
+</code></pre></div>
+<p>The code above checks whether the input is a string or whether there were invalid characters submitted. To be honest, this kind of validation sounds like it should go in the model. We want basic float validation without having to resort to figuring out every possible invalid combination. Luckily, Rails provides a really convenient macro that we can use in our model:</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>validates_numericality_of</span> <span class='ss'>:amount</span>
+</code></pre></div>
+<p>This macro will prevent the bid from being saved if the amount submitted is not a number.</p>
+
+<p>Looking over the remainder of our code, we create a new flash notice for our users on new lines. We can slim this down by passing that notice to the redirect so it can be rendered in our views.</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>redirect_to</span> <span class='n'>auction_path</span><span class='p'>(</span><span class='vi'>@auction</span><span class='p'>),</span> <span class='ss'>notice</span><span class='p'>:</span> <span class='err'>‘</span><span class='no'>You</span> <span class='n'>are</span> <span class='n'>the</span> <span class='n'>current</span> <span class='n'>high</span> <span class='n'>bidder!</span><span class='err'>’</span>
+</code></pre></div>
+<p>We also seem to be redirecting to the same view multiple times. By pulling that information out of our the if statement, we can DRY up our codebase. Additionally, since we’re performing our own validation, we can comfortably call our save method directly in our controller. Finally, we can use some Rails magic to simplify some of our method calls. Our final controller codebase looks something like this (apologies for the odd formatting errors):</p>
+<div class='highlight'><pre><code class='ruby'><span class='n'>before_action</span> <span class='ss'>:set_auction</span><span class='p'>,</span> <span class='ss'>only</span><span class='p'>:</span> <span class='o'>[</span><span class='ss'>:show</span><span class='p'>,</span> <span class='ss'>:update</span><span class='p'>,</span> <span class='ss'>:destroy</span><span class='o'>]</span>
+
+<span class='k'>def</span> <span class='nf'>create</span>
+  <span class='vi'>@bid</span> <span class='o'>=</span> <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>bids</span><span class='o'>.</span><span class='n'>build</span><span class='p'>(</span><span class='ss'>amount</span><span class='p'>:</span> <span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>]</span><span class='p'>,</span> <span class='n'>bidder_id</span><span class='p'>:</span>   <span class='n'>session</span><span class='o'>[</span><span class='ss'>:user_id</span><span class='o'>]</span><span class='p'>)</span>
+  <span class='k'>if</span> <span class='n'>first_bid?</span> <span class='o'>||</span> <span class='n'>higher_bid?</span>
+    <span class='vi'>@bid</span><span class='o'>.</span><span class='n'>save</span>
+    <span class='n'>redirect_to</span> <span class='vi'>@auction</span><span class='p'>,</span> <span class='ss'>notice</span><span class='p'>:</span> <span class='err'>‘</span><span class='no'>You</span> <span class='n'>are</span> <span class='n'>the</span> <span class='n'>current</span> <span class='n'>high</span> <span class='n'>bidder!</span><span class='err'>’</span>
+  <span class='k'>else</span>
+    <span class='n'>redirect_to</span> <span class='err'>“</span><span class='o'>/</span><span class='n'>auctions</span><span class='o'>/</span><span class='c1'>#{@auction.id}”, notice: ‘Amount is too low!’</span>
+  <span class='k'>end</span>
+<span class='k'>end</span>
+
+<span class='k'>def</span> <span class='nf'>first_bid?</span>
+  <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>bids</span><span class='o'>.</span><span class='n'>length</span> <span class='o'>==</span> <span class='mi'>1</span>
+<span class='k'>end</span>
+
+<span class='k'>def</span> <span class='nf'>higher_bid?</span>
+  <span class='p'>(</span><span class='n'>params</span><span class='o'>[</span><span class='ss'>:amount</span><span class='o'>].</span><span class='n'>to_i</span> <span class='o'>&gt;</span> <span class='vi'>@auction</span><span class='o'>.</span><span class='n'>highest_bid</span><span class='o'>.</span><span class='n'>amount_in_dollars</span><span class='p'>)</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p>Our codebase is now decoupled and our logic is much easier to follow.</p>
+
+<p>The main reason why we were able to change our code confidently is because we had a passing test spec before we started. Writing tests for your code is so important because it gives you the flexibility to make your code as best as it could be. By practicing TDD, you can confidentially refactor your codebase and not worry about breaking your application.</p>
+
+<p>Happy refactoring!</p>
+            
+        </section>
+
+        <footer>
+            <address>
+               
+                <p>Written by <strong><a rel="author" href="https://twitter.com/" title="" target="_blank"></a></strong><br>
+                <span class="muted"></span>
+                </p>
+            </address>
+
+        </footer>
+
+        
+    </div>
+</article>
+
+
+<footer class="site-footer">
+    <div class="container">
+        &copy; 2014 
+        
+        <nav>
+            <a href="www.spector.io">Daniel Spector</a> &middot;
+            <a href="/">Blog</a> &middot;
+            <a href="www.spector.io">Product</a> &middot; 
+            <a href="www.flatironschool.com">About</a>
+        </nav>
+        
+        <nav class="social">
+            
+            <a href="https://twitter.com/danielspecs" title="Follow on Twitter" target="_blank"><i class="icon icon-twitter black"></i></a>
+            
+            
+            <a href="http://facebook.com/danielspector" title="Follow on Facebook" target="_blank"><i class="icon icon-facebook black"></i></a>
+                
+            <a href="/feed.xml" title="RSS Feed">
+                <i class="icon icon-rss black"></i>
+            </a>
+        </nav>
+        <p>Incorporated theme by <a href="https://sendtoinc.com">Inc</a></p>
+    </div>
+</footer>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/assets/main.js"></script>
+
+
+
+
+
+
+
+</body>
+</html>

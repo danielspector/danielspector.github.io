@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writing My First Gem - Bit_Price &mdash; Daniel Spector</title>
+    <link href="https://fonts.googleapis.com/css?family=Droid+Sans:400,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="/assets/main.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="apple-touch-icon" href="/images/logo.png"/>
+    <link href="/feed.xml" rel="alternate" type="application/rss+xml" title="Daniel Spector" />
+    <meta name="title" content="Writing My First Gem - Bit_Price ">
+    <link rel="canonical" href="www.spector.io/2014/04/06/writing-my-first-gem---bit_price/">
+     
+           
+    <meta property="og:title" content="Writing My First Gem - Bit_Price "/>
+    <meta property="og:url" content="www.spector.io/2014/04/06/writing-my-first-gem---bit_price/"/>
+    
+    
+    <meta property="og:description" content="Bitcoin Scraping for Fun and Profit with Nokogiri"/>
+    <meta name="description" content="Bitcoin Scraping for Fun and Profit with Nokogiri"/>
+    
+    <meta property="og:site_name" content="Daniel Spector">     
+</head>
+<body>
+    
+<section class="site-nav">
+    <header>
+        <nav id="navigation">
+            <a class="brand" href="/">
+                <img src="/images/logo.png" alt="Inc">
+            </a>
+            <a href="/" class="home">Blog</a>
+            <a href="www.spector.io">Product</a>
+            <a href="www.flatironschool.com">About</a>
+        </nav>
+       <!--  <nav class="tagline">
+            <span>Just a guy loving programming.</span>
+            <a href="www.spector.io" class="btn btn-outline">Learn More</a> -->
+        </nav>
+    </header>
+</section>
+
+
+<article>
+
+    <div class="container">
+        <header>
+            <div class="meta">
+                By <address><a rel="author" href="" title="Daniel Spector" target="_blank">Daniel Spector</a></address> &mdash;
+                <time pubdate datetime="2014-06-April" title="April 06, 2014">April 06, 2014</time>
+            </div>
+            <h1 class="title">Writing My First Gem - Bit_Price</h1>
+            
+        </header>
+
+        <section>
+            <p>At the Flatiron School we’ve been taught that the structures and syntax of programming are just that, structures. Just like a building is only as valuable as the people you put in it and what you use it for, the structures of programming are only as valuable as the programs you make with them.</p>
+
+<p>Over the last couple days we covered diverse topics such as web scraping and RubyGems. I decided to implement both of these skills in one project in order to reinforce what we’ve covered in lectures.</p>
+
+<p>Web scraping is a broad topic that I’ll definitely be writing about more thoroughly in future posts, but for now let’s just define it as “gathering data from a website and bringing it into your program.” Anything that can be viewed through a browser can (theoretically) be scraped. In the Ruby community, most web scraping is done through a gem called Nokogiri.</p>
+
+<p>A RubyGem, or gem for short, is a packaged piece of code that can be passed around to different computers. If I write a ruby file that I want to share with the world, I want to make it as convenient as possible for others to access and utilize my code. There’s a fantastic project called RubyGems that allows people to easily publish their gems for others to use. In this post, I’m going to explore how I published my first gem and what improvements I still need to make.</p>
+
+<p>First, before publishing a gem we’re going to assume that you have a working Ruby file that you want to share with the world. The gem can be as simple as printing “Hello World” to the screen or complicated as a Ruby on Rails project. For this project, I decided to write a small scraper that uses Nokogiri to grab the Bitcoin buy and sell prices from Coinbase’s website.</p>
+
+<h1 id="bit_price_my_first_gem">Bit_Price: My First Gem</h1>
+
+<p>Below is the actual Ruby code that is run when you execute the gem I created. The file is called bit_price.rb and is packaged up with the gem. If you’ve never seen Ruby code (or any code at all) this might look a little unfamiliar to you but that’s OK, you don’t have to understand this code to learn how to create a gem.</p>
+<div class='highlight'><pre><code class='ruby'><span class='nb'>require</span> <span class='err'>‘</span><span class='n'>nokogiri</span><span class='err'>’</span>
+<span class='nb'>require</span> <span class='err'>‘</span><span class='nb'>open</span><span class='o'>-</span><span class='n'>uri</span><span class='err'>’</span>
+<span class='k'>def</span> <span class='nf'>bit_price</span>
+ <span class='n'>page</span> <span class='o'>=</span> <span class='no'>Nokogiri</span><span class='o'>::</span><span class='no'>HTML</span><span class='p'>(</span><span class='nb'>open</span><span class='p'>(</span><span class='err'>“</span><span class='ss'>https</span><span class='p'>:</span><span class='sr'>//</span><span class='n'>coinbase</span><span class='o'>.</span><span class='n'>com</span><span class='o'>/</span><span class='n'>charts</span><span class='err'>”</span><span class='p'>))</span>
+ <span class='n'>prices</span> <span class='o'>=</span> <span class='n'>page</span><span class='o'>.</span><span class='n'>css</span><span class='p'>(</span><span class='err'>“</span><span class='n'>div</span><span class='o'>.</span><span class='n'>page</span><span class='o'>-</span><span class='n'>header</span> <span class='n'>h2</span><span class='o'>.</span><span class='n'>pull</span><span class='o'>-</span><span class='n'>right</span> <span class='n'>strong</span><span class='err'>”</span><span class='p'>)</span><span class='o'>.</span><span class='n'>text</span><span class='o'>.</span><span class='n'>split</span><span class='p'>(</span><span class='err'>“$”</span><span class='p'>)</span><span class='o'>.</span><span class='n'>reject</span><span class='p'>(</span><span class='o'>&amp;</span><span class='ss'>:empty?</span><span class='p'>)</span>
+ <span class='nb'>puts</span>
+ <span class='nb'>puts</span> <span class='err'>“</span><span class='no'>The</span> <span class='no'>Current</span> <span class='no'>Bitcoin</span> <span class='no'>Prices</span> <span class='ss'>Are</span><span class='p'>:</span><span class='err'>”</span>
+ <span class='nb'>puts</span> <span class='err'>“</span><span class='no'>Buy</span> <span class='ss'>Price</span><span class='p'>:</span> <span class='err'>$</span><span class='c1'>#{prices[0]}”</span>
+ <span class='nb'>puts</span> <span class='err'>“</span><span class='no'>Sell</span> <span class='ss'>Price</span><span class='p'>:</span> <span class='err'>$</span><span class='c1'>#{prices [1]}”</span>
+ <span class='nb'>puts</span>
+ <span class='nb'>puts</span> <span class='err'>“</span><span class='no'>Prices</span> <span class='n'>provided</span> <span class='n'>by</span> <span class='n'>www</span><span class='o'>.</span><span class='n'>coinbase</span><span class='o'>.</span><span class='n'>com</span><span class='o'>/</span><span class='n'>charts</span><span class='err'>”</span>
+<span class='k'>end</span>
+</code></pre></div>
+<p>The Nokigiri gem scrapes the prices from the Coinbase site using their HTML tags and CSS selectors. For a quick recap, every website has “tags” which tells your browser how to render the page and CSS selectors which allow you to style your content. Coinbase actually names their CSS selectors for buy and sell prices with identical names, which meant that when I tried to get the text of the name I was given both the buy and sell prices. To get around this, I had to split the text into an array using the “$” as the delimiter and delete the blank string that it added to the array.</p>
+
+<p>If none of that made sense to you, that’s OK. Just keep in mind that your gem can do anything that you want it to, mine just happens to grab two numbers from a website and prints them to a screen.</p>
+
+<p>Getting Started with RubyGems To get started with RubyGems, I did a Google search and landed on the official instruction page for RubyGems. The guide is very helpfully written and made it easy to push up the gem.</p>
+
+<p>The first thing I had to was reorganize my code. I called my main folder “bitcoin_price”. The RubyGems website expects that you will have a folder at the root of your project (the main folder where your project files are) called lib/ where your the Ruby file you just created will live. Additionally, you will need a .gemspec file in your main project directory with the Gem name so let’s create that now. To create a blank file just run:</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>touch bit_price.gemspec
+</code></pre></div>
+<p>Once you’ve reorganized your files, your structure should look something like this:</p>
+<div class='highlight'><pre><code class='yaml'><span class='err'>%</span> <span class='l-Scalar-Plain'>bitcoin_price</span>
+
+<span class='l-Scalar-Plain'>├── bit_price.gemspec</span>
+<span class='l-Scalar-Plain'>└── lib</span>
+ <span class='l-Scalar-Plain'>└── bit_price.rb</span>
+ 
+</code></pre></div>
+<p>Next you should open up the blank .gemspec file in your favorite text editor (I use Sublime Text) and edit it with the following code, substituting your information where appropriate.</p>
+<div class='highlight'><pre><code class='ruby'><span class='no'>Gem</span><span class='o'>::</span><span class='no'>Specification</span><span class='o'>.</span><span class='n'>new</span> <span class='k'>do</span> <span class='o'>|</span><span class='n'>s</span><span class='o'>|</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>name</span> <span class='o'>=</span> <span class='err'>‘</span><span class='n'>bit_price</span><span class='err'>’</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>version</span> <span class='o'>=</span> <span class='err'>‘</span><span class='mi'>0</span><span class='o'>.</span><span class='mi'>0</span><span class='o'>.</span><span class='mi'>2</span><span class='s1'>&#39;</span>
+<span class='s1'> s.executables &lt;&lt; ‘bit_price’</span>
+<span class='s1'> s.date = ‘2014-02-12&#39;</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>summary</span> <span class='o'>=</span> <span class='err'>“</span><span class='no'>Bitcoin</span> <span class='no'>Prices</span> <span class='n'>from</span> <span class='no'>Your</span> <span class='no'>Terminal</span><span class='err'>”</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>description</span> <span class='o'>=</span> <span class='err'>“</span><span class='no'>Get</span> <span class='n'>the</span> <span class='no'>Bitcoin</span> <span class='n'>price</span> <span class='n'>easily</span> <span class='n'>from</span> <span class='n'>your</span> <span class='n'>terminal</span><span class='err'>”</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>authors</span> <span class='o'>=</span> <span class='o'>[</span><span class='err'>“</span><span class='no'>Daniel</span> <span class='no'>Spector</span><span class='err'>”</span><span class='o'>]</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>email</span> <span class='o'>=</span> <span class='err'>‘</span><span class='n'>danielyspector</span><span class='vi'>@gmail</span><span class='o'>.</span><span class='n'>com</span><span class='err'>’</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>files</span> <span class='o'>=</span> <span class='o'>[</span><span class='err'>“</span><span class='n'>lib</span><span class='o'>/</span><span class='n'>bit_price</span><span class='o'>.</span><span class='n'>rb</span><span class='err'>”</span><span class='o'>]</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>homepage</span> <span class='o'>=</span>
+ <span class='err'>‘</span><span class='ss'>http</span><span class='p'>:</span><span class='sr'>//</span><span class='n'>rubygems</span><span class='o'>.</span><span class='n'>org</span><span class='o'>/</span><span class='n'>gems</span><span class='o'>/</span><span class='n'>bit_price</span><span class='err'>’</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>license</span> <span class='o'>=</span> <span class='err'>‘</span><span class='no'>MIT</span><span class='err'>’</span>
+ <span class='n'>s</span><span class='o'>.</span><span class='n'>add_runtime_dependency</span> <span class='err'>“</span><span class='n'>nokogiri</span><span class='err'>”</span><span class='p'>,</span> <span class='o'>[</span><span class='err'>“</span><span class='o'>&gt;=</span><span class='mi'>0</span><span class='s2'>&quot;]</span>
+<span class='s2'>end</span>
+</code></pre></div>
+<p>One thing to note is the version name. If you previously pushed your gem up to RubyGems with an identical version number and then make changes, it will reject your update. Each push has to have a unique version number. You’ll notice that there’s an executables file right under version. We’ll cover that in a bit. Mostly you want to fill out the information for your gem including your personal information such as author and email. You’ll also see that we’re adding a runtime dependency for Nokogiri. This will install Nokogiri on the user’s computer if it’s not installed already.</p>
+
+<p>We’re going to create one more file which will make it much more convenient for people to access our gem. We need to create an executable file in a bin/ folder simply called “bit_price” that will allow people to run the code from the command line. For my project I created the following structure:</p>
+<div class='highlight'><pre><code class='yaml'><span class='err'>%</span> <span class='l-Scalar-Plain'>bitcoin_price</span>
+
+<span class='l-Scalar-Plain'>├── bin</span>
+<span class='l-Scalar-Plain'>│ └── bit_price</span>
+<span class='l-Scalar-Plain'>├── bit_price.gemspec</span>
+<span class='l-Scalar-Plain'>└── lib</span>
+ <span class='l-Scalar-Plain'>└── bit_price.rb</span>
+</code></pre></div>
+<p>In bin/bit_price I created a simple file that called our bit_price.rb file and executed it.</p>
+<div class='highlight'><pre><code class='ruby'><span class='c1'>#!/usr/bin/env ruby</span>
+<span class='nb'>require</span> <span class='err'>‘</span><span class='n'>bit_price</span><span class='err'>’</span>
+<span class='n'>bit_price</span>
+</code></pre></div>
+<p>Notice that I named my method bit_price in my bit_price.rb file which has to match the executable call shown above. This will be equivalent to people running</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>ruby bit_price.rb
+</code></pre></div>
+<p>on their command line. Now we’re all set up and we’re ready to test our gem!</p>
+
+<p>To setup my gem and allow me to test it, I ran the following two commands at the root of my project directory.</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>gem build bit_price.gemspec
+<span class='nv'>$ </span>gem install ./bit_price-0.0.2.gem
+</code></pre></div>
+<p>Note that the version number has to match what you put in your bit_price.gemspec file.</p>
+
+<p>Now you should be able to run your file simply by typing</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>bit_price
+</code></pre></div>
+<p>If that doesn’t work, you might have to enter irb, require the gem, and then run it.</p>
+
+<p>Assuming you get the output you’re looking for, you should be ready to distribute your gem.</p>
+
+<p>Distributing Your Gem: Getting your gems up on RubyGems Now we’re going to get our gems up on RubyGems so anyone can find and download it. First, navigate to the RubyGems and sign up. Remember the handle and password that you enter — it will be important in a minute. Once you sign up, open a new tab in your browser and go the following link:</p>
+
+<p>https://rubygems.org/api/v1/api_key.yaml</p>
+
+<p>You’ll be brought to an authentication screen. Type in the handle/username that you set up before. This should automatically download a file called api_key.yaml file to your computer. You’re going to need to move this file to your .gem folder and rename it to CREDENTIALS with the following commands. Assuming your download defaulted to your Downloads folder, run the following:</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>mv ~/Downloads/api_key.yaml ~/.gem
+<span class='nv'>$ </span><span class='nb'>cd</span> ~/.gem
+<span class='nv'>$ </span>mv api_key.yaml CREDENTIALS
+</code></pre></div>
+<p>Once you’ve run those commands you should be all set up to push your gem to RubyGems! Simply run the command below and you should see the following output.</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>gem push bit_price-0.0.2.gem
+which should <span class='o'>(</span>hopefully<span class='o'>)</span> result in:
+</code></pre></div>
+<p>Pushing gem to RubyGems.org… Successfully registered gem: bit_price(0.0.2) Take a small break. You’ve accomplished a lot. Once you come back, your gem should be available for everyone to see on the RubyGems website. A simple way to ensure that you’ve successfully published your gem is to type:</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>gem list -r bit_price
+*** REMOTE GEMS ***
+bit_price <span class='o'>(</span>0.0.2<span class='o'>)</span>
+</code></pre></div>
+<p>Once you’ve confirmed that your gem has been successfully uploaded, anyone with the RubyGems package manager installed (it comes standard with Ruby) should be able to run</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>gem install bit_price
+</code></pre></div>
+<p>and then</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>bit_price
+</code></pre></div>
+<p>to run the program. Now all anyone has to do is to type your method name and see the output of of your program from anywhere in their terminal.</p>
+<div class='highlight'><pre><code class='bash'><span class='nv'>$ </span>bit_price
+The Current Bitcoin Prices Are:
+Buy Price: <span class='nv'>$676</span>.69
+Sell Price: <span class='nv'>$674</span>.66
+Prices provided by www.coinbase.com/charts
+</code></pre></div>
+<p>Great job! Your gem is now live for anyone to download. Make sure to put your code up on Github so others can comment and improve on your work. The power of open source is incredible.</p>
+
+<p>A To-Do list for this gem A couple quick caveats and some things to consider when writing your own gem.</p>
+
+<p>It has no tests and you should always test your code in a separate spec file before you publish. I like RSpec, it’s nearly magical. It depends on Nokogiri to run. Since I already have Nokogiri installed, I had no issues with the program but other people might have issues installing Nokogiri when they run your program. If anyone has any feedback on this I would love to hear it. Make sure your gem name isn’t taken already before you try to publish! Your push to RubyGems will not work if the name is taken. You should add a license and a README to the file so you protect yourself and be able to guide new users with how to run your program. I had a lot of fun learning gems and I hope you found this useful. You can find the completed source code at https://github.com/danielspector/bitcoin_price</p>
+
+<p>As always I would love your feedback on the post. Follow me on Twitter @danielspecs.</p>
+
+<p>A huge thanks to Sam Schlinkert for reviewing this post and fixing my sometimes inelegant choice of words.</p>
+
+<p>Thanks for reading!</p>
+            
+        </section>
+
+        <footer>
+            <address>
+               
+                <p>Written by <strong><a rel="author" href="https://twitter.com/danielspecs" title="" target="_blank">Daniel Spector</a></strong><br>
+                <span class="muted"></span>
+                </p>
+            </address>
+
+        </footer>
+
+        
+    </div>
+</article>
+
+
+<footer class="site-footer">
+    <div class="container">
+        &copy; 2014 
+        
+        <nav>
+            <a href="www.spector.io">Daniel Spector</a> &middot;
+            <a href="/">Blog</a> &middot;
+            <a href="www.spector.io">Product</a> &middot; 
+            <a href="www.flatironschool.com">About</a>
+        </nav>
+        
+        <nav class="social">
+            
+            <a href="https://twitter.com/danielspecs" title="Follow on Twitter" target="_blank"><i class="icon icon-twitter black"></i></a>
+            
+            
+            <a href="http://facebook.com/danielspector" title="Follow on Facebook" target="_blank"><i class="icon icon-facebook black"></i></a>
+                
+            <a href="/feed.xml" title="RSS Feed">
+                <i class="icon icon-rss black"></i>
+            </a>
+        </nav>
+        <p>Incorporated theme by <a href="https://sendtoinc.com">Inc</a></p>
+    </div>
+</footer>
+
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="/assets/main.js"></script>
+
+
+
+
+
+
+
+</body>
+</html>
