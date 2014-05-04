@@ -1,10 +1,13 @@
-name: "Gereksiz"
-markdown: redcarpet
+name: "Daniel Spector"
 pygments: true
 permalink: :title
 exclude: [README.md, LICENSE, Makefile]
 
+markdown: redcarpet
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "strikethrough", "superscript"]
+
 # Information for the Atom feed
-gereksiz:
-   author: "John Doe"
-   email: "john.doe@mail.sexy"
+danielspector:
+   author: "Daniel Spector"
+   email: "danielyspector@gmail.com"
