@@ -30,7 +30,7 @@ Our tests fail as expected and we can now move on to the implementation.
 
 For this example we're not going to break out our logic into several classes as we want this to be as functional and simple as possible. Let's think through the problem before we implement it in code.
 
-The first thing we should realize is that we can automatically disregard half the numbers that we'll encounter. If we start with 100, we can divide by 2 and throw out the larger half because 50 + 51 will always be greater than 100. Conversly, we can express in mathetical terms that n/2 + n/2+1 will always be larger than n.
+The first thing we should realize is that we can automatically disregard half the numbers that we'll encounter. If we start with 100, we can divide by 2 and throw out the larger half because 50 + 51 will always be greater than 100. Conversly, we can express in mathematical terms that n/2 + n/2+1 will always be larger than n.
 
 Let's start by writing a method that will iterate through each number starting from 1 to n/2
 
