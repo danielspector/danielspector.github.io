@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Computer Science Fundamentals: Searching & Sorting"
+title: "Computer Science Fundamentals: Searching &amp; Sorting"
 date: 2014-04-27 17:40:41
 ---
 

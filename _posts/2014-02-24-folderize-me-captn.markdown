@@ -39,7 +39,7 @@ $ rspec --init
 ```
 in our project root, which also creates a .rspec file. These two files allow us to configure RSpec and tweak to our needs so we can test our files. Most importantly, we need to make sure that our testing files know about all the other files in the file structure so we would make sure to require the environment.rb file we discussed earlier at the top of our spec_helper.rb file.
 
-Gemfile & Gemfile.lock — Gems are a really convenient way for Rubyists to pass around and share code. As I discussed in a previous blog post, Gems are often indispensable to the function of ourprogram and we want to make sure that we are including the gems we want and managing them properly. A really clever program called Bundler allows us to manage the gems we’ll be needing in our program. To get set up with a Gemfile in your program run
+Gemfile &amp; Gemfile.lock — Gems are a really convenient way for Rubyists to pass around and share code. As I discussed in a previous blog post, Gems are often indispensable to the function of ourprogram and we want to make sure that we are including the gems we want and managing them properly. A really clever program called Bundler allows us to manage the gems we’ll be needing in our program. To get set up with a Gemfile in your program run
 
 ```bash
 $ bundle init
