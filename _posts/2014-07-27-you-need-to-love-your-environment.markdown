@@ -4,8 +4,6 @@ title: You Need to Love Your Environment
 date: 2014-07-27 22:29:00
 ---
 
-# You Need to Love Your Environment
-
 When I started programming I would hear a lot about "dotfiles" and vimrc's. I realized that these were customizations that people had made to their workflows.
 
 To be honest, I never thought I would have time for it. It was hard enough learning how to program, having to think about creating bash aliases and tinkering with editor themes was total information overload.
