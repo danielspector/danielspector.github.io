@@ -3,7 +3,7 @@ layout: post
 title: Preloading Data in Ember with Rails
 date: 2015-04-23 11:41:46
 ---
-**This is a subset of a talk I gave at Railsconf. You can find the slides ot the full talk [here](http://www.slideshare.net/danielyspector/crossing-the-bridge-connecting-rails-and-your-frontend-framework)**
+**This is a subset of a talk I gave at Railsconf. You can find the slides to the full talk [here](https://speakerdeck.com/danielspector/crossing-the-bridge-connecting-rails-and-your-front-end-framework)**
 
 Ember JS is a fantastic framework for working with, in the words its creators, large, ambitious applications. However, Ember suffers from the same problem that all client-side frameworks do. If you need to load a specific subset of your data that's not trivial to retrieve from the client, you're going to spend a lot of time on startup figuring out what data to display and making a series of API calls to your server. That's great if your users are on a super fast connection but for users on mobile or those who aren't lucky enough to have access to the fastest broadband possible, they're going to see loading bars and animated gif spinners. Not the best experience when someone is first coming to your page. To mitigate this, we'are able to use the power of Ember and Ember Data to preload our data so Ember will load up with the exact data that we need.
 
