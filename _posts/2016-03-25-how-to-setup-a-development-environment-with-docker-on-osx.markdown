@@ -2,6 +2,7 @@
 layout: post
 title: How to setup a development environment with Docker on OSX
 date: 2016-03-25 15:08:41
+comments: true
 ---
 
 Setting up a new project can be an absolute nightmare. If there are many interlocking parts, the codebase will make assumptions about how your system is set up. New developers can take days to get a proper development environment going. Even scarier, many companies rely on "special" production boxes to deploy their code. These servers have been hand-configured over the years and the loss of them could be catastrophic for getting the app running properly. Orchestration management tools like Ansible, Salt, Chef and Puppet were introduced to solve this problem in Production. However, this doesn't solve the fundamental problem that the developer's environments don't always match what is deployed to Production. This leads to frustrating problems where a piece of code works on one person's machine but breaks when deployed. To solve this, you need to ensure that you have a consistent environment and this is what Docker allows you to do. For those who are unfamiliar, Docker is a container system that allows you to guarentee a consistent environment whether you're developing on your local machine or deploying to Production.
