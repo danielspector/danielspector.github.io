@@ -2,6 +2,7 @@
 layout: post
 title: "Computer Science Fundamentals: Data Structures - Part 1"
 date: 2014-04-28 17:40:41
+comments: true
 ---
 
 Continuing with our series on computer science fundamentals, lets take a look at some different data structures and when you would choose to use one or the other.

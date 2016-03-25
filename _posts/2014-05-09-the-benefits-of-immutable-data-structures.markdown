@@ -2,6 +2,7 @@
 layout: post
 title: The Benefits of Immutable Data Structures
 date: 2014-05-09 15:05:06
+comments: true
 ---
 
 Recently I've been playing around with Clojure. Clojure, as opposed to Ruby, is a functional programming languages. One of the key distinctions between functional and object-oriented languages is immutable data structures. Immutable data structures, as opposed to mutuble structures, cannot be changed once created. When you change the value of an immutable data structure, you are actually creating a new copy of that structure. A string or an array in Ruby is mutable. Let's prove that with a simple example I just cooked up in IRB.

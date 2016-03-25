@@ -2,6 +2,7 @@
 layout: post
 title: Preloading Data in Ember with Rails
 date: 2015-04-23 11:41:46
+comments: true
 ---
 **This is a subset of a talk I gave at Railsconf. You can find the slides to the full talk [here](https://speakerdeck.com/danielspector/crossing-the-bridge-connecting-rails-and-your-front-end-framework)**
 

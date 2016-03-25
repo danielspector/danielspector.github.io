@@ -2,6 +2,7 @@
 layout: post
 title: Swift Will Only Benefit RubyMotion
 date: 2014-06-10 10:19:48
+comments: true
 ---
 
 Some of you may know that I'm a huge RubyMotion fan. The clean syntax, the DSL's, the community... it's fantastic. Last week at WWDC, Apple announced Swift, a brand-new programing language for iOS and OSX development. Many in the RubyMotion community have taken this as a sign that RubyMotion is headed for demise and I think that's completely untrue.

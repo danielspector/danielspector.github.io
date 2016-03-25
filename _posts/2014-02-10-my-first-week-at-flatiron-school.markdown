@@ -2,6 +2,7 @@
 layout: post
 title: "My First Week at Flatiron School"
 date: 2014-02-10 17:40:41
+comments: true
 ---
 
 The first week at Flatiron is over and it has been one of the most remarkable weeks of my life. I can’t ever remember having so many highs and lows in one week.

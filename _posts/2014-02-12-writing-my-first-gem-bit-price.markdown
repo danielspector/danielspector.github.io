@@ -2,6 +2,7 @@
 layout: post
 title: "Writing my first gem - Bit Price"
 date: 2014-02-12 17:40:41
+comments: true
 ---
 
 At the Flatiron School we’ve been taught that the structures and syntax of programming are just that, structures. Just like a building is only as valuable as the people you put in it and what you use it for, the structures of programming are only as valuable as the programs you make with them.

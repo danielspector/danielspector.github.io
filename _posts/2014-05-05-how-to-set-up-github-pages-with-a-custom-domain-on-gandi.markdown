@@ -2,6 +2,7 @@
 layout: post
 title: How to Set Up Github Pages with a Custom Domain on Gandi
 date: 2014-05-05 15:22:21
+comments: true
 ---
 
 If you've been following my blog you'll notice that things are looking a little different around here. I had been blogging on Medium for awhile but decided to switch over to a Jekyll-powered blog hosted on Github Pages so I could have a little more control (and syntax highlighting! Finally!).

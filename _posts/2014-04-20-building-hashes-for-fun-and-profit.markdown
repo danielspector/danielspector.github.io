@@ -2,6 +2,7 @@
 layout: post
 title: "Building Hashes for Fun and Profit"
 date: 2014-04-20 17:40:41
+comments: true
 ---
 
 We’re wrapping up the semester at the Flatiron School and the school organized mock technical interviews for us so we could get some practice in a live coding environment before going on actual interviews. My mock interviewer was [Ed Weng](https://twitter.com/wengzilla), a great developer and all-around super nice guy. I wanted to discuss the programming challenge that Ed presented to me so others can learn and comment on it.

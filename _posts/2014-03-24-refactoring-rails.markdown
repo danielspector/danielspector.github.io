@@ -2,6 +2,7 @@
   layout: post
 title: "Refactoring Rails"
 date: 2014-03-24 17:40:41
+comments: true
 ---
 
 Recently at the Flatiron School we were tasked with creating a simplified eBay clone using our newfound knowledge of Ruby on Rails. My team and I diligently worked through the test spec provided to create a fully functioning auction app complete with user accounts, auctions and a whole host of validations.

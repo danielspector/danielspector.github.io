@@ -2,6 +2,7 @@
 layout: post
 title: You Need to Love Your Environment
 date: 2014-07-27 22:29:00
+comments: true
 ---
 
 When I started programming I would hear a lot about "dotfiles" and vimrc's. I realized that these were customizations that people had made to their workflows.

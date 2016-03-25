@@ -2,6 +2,7 @@
 layout: post
 title: "Learning to Learn"
 date: 2014-01-24 17:40:41
+comments: true
 ---
 The more that I try to wrap my head around loops, variables and conditions the more I realize that coding is an art. Most people have assumed that the advent of the computer age would usher in a new era where robot-speak would be the norm and people would be shunned for their creative expressions.
 

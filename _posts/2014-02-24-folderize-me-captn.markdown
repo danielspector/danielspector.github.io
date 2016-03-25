@@ -2,6 +2,7 @@
 layout: post
 title: "Folderize Me Capt'n"
 date: 2014-02-24 17:40:41
+comments: true
 ---
 
 All groups will eventually agree on a code, a set of rules that they can use to communicate with each other. To outsiders, these codes may look inscrutable, but to those on the inside its almost a way of life. Rubyists around the world have largely agreed to a file structure when creating Ruby programs and scripts. When I first encountered the file structure I was lost and confused, wandering around from file to file not sure of what I was looking like. After spending some time working in and creating ruby file structures, I’m more comfortable than ever. It’s my hope that after reading you’ll feel the same.

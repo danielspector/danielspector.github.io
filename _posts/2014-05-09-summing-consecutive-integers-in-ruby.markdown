@@ -2,6 +2,7 @@
 layout: post
 title: Summing Consecutive Integers in Ruby
 date: 2014-05-09  0:24:32
+comments: true
 ---
 
 Let's solve a quick math problem using Ruby.

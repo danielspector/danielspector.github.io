@@ -2,6 +2,7 @@
 layout: post
 title: "Computer Science Fundamentals: Searching &amp; Sorting"
 date: 2014-04-27 17:40:41
+comments: true
 ---
 
 To review some of the material that I learned over the last few weeks, I wanted to create a series dedicated to computer science fundamentals. My hope is that I will be able to help others while learning at the same time.

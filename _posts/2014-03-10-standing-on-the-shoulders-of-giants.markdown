@@ -2,6 +2,7 @@
 layout: post
 title: "Standing on the Shoulders of Giants"
 date: 2014-03-10 17:40:41
+comments: true
 ---
 
 Programming today is completely different than programming 30 years ago. Even using Ruby is world’s different than using lower-level programming languages. Take a look at old FORTRAN and Assembly manuals and you quickly begin to appreciate the syntactic beauty of the Ruby programming language.
